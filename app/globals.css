@@ -2,14 +2,93 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-burgundy: #6E263D;
+  --color-ivory: #F7F1E8;
+  --color-gold: #B18A55;
+  --color-muted-rose: #C98F91;
+  --color-espresso: #342522;
+
+  --tracking-eyebrow: 0.12em;
+  --spacing-button: 2.75rem;
+  --spacing-button-lg: 3rem;
+  --spacing-button-x: 1.25rem;
+  --spacing-button-lg-x: 1.5rem;
+  --radius-button: 0.25rem;
+  --radius-button-lg: 0.375rem;
+  --shadow-product: 0 2px 8px rgb(52 37 34 / 8%);
+}
 
 @theme inline {
+  --font-heading: var(--font-playfair-display), Georgia, serif;
+  --font-body: var(--font-montserrat), Arial, sans-serif;
+  --font-sans: var(--font-montserrat), Arial, sans-serif;
+  --font-accent: var(--font-cormorant-garamond), Georgia, serif;
+  --font-mono: var(--font-geist-mono);
+
+  /* Heading sizes interpolate between 384px, 768px, and 1024px. */
+  --text-h1: calc(2.25rem + clamp(0rem, 2.083333vw - 0.5rem, 0.5rem) + clamp(0rem, 3.125vw - 1.5rem, 0.5rem));
+  --text-h1--line-height: 1.12;
+  --text-h1--font-weight: 600;
+  --text-h2: calc(1.875rem + clamp(0rem, 1.041667vw - 0.25rem, 0.25rem) + clamp(0rem, 2.34375vw - 1.125rem, 0.375rem));
+  --text-h2--line-height: 1.18;
+  --text-h2--font-weight: 600;
+  --text-h3: calc(1.5rem + clamp(0rem, 0.78125vw - 0.1875rem, 0.1875rem) + clamp(0rem, 1.171875vw - 0.5625rem, 0.1875rem));
+  --text-h3--line-height: 1.2;
+  --text-h3--font-weight: 600;
+  --text-h4: calc(1.125rem + clamp(0rem, 0.520833vw - 0.125rem, 0.125rem) + clamp(0rem, 0.78125vw - 0.375rem, 0.125rem));
+  --text-h4--line-height: 1.3;
+  --text-h4--font-weight: 600;
+  --text-h5: 1.125rem;
+  --text-h5--line-height: 1.35;
+  --text-h5--font-weight: 600;
+  --text-h6: 1rem;
+  --text-h6--line-height: 1.4;
+  --text-h6--font-weight: 600;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.65;
+  --text-body-lg--font-weight: 400;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-body-sm--font-weight: 400;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.45;
+  --text-caption--font-weight: 400;
+  --text-nav: 0.875rem;
+  --text-nav--line-height: 1.4;
+  --text-nav--font-weight: 500;
+  --text-button: 0.875rem;
+  --text-button--line-height: 1;
+  --text-button--font-weight: 600;
+
+  --spacing-gutter: clamp(1rem, 4vw, 3rem);
+  --spacing-section: clamp(3rem, 8vw, 6rem);
+  --spacing-stack: clamp(1rem, 3vw, 2rem);
+
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-disabled: var(--primary-disabled);
+  --color-primary-disabled-foreground: var(--primary-disabled-foreground);
+  --color-button-secondary-foreground: var(--button-secondary-foreground);
+  --color-button-secondary-border: var(--button-secondary-border);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-secondary-hover-foreground: var(--button-secondary-hover-foreground);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-input-surface: var(--input-surface);
+  --color-surface: var(--card);
+  --color-surface-elevated: var(--popover);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted-foreground);
+  --color-surface-accent: var(--muted);
+  --color-input-focus: var(--color-gold);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,81 +128,125 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: #F7F1E8;
+  --foreground: #342522;
+  --card: #FFFCF7;
+  --popover: #FFFFFF;
+  --muted-foreground: #6D5B55;
+  --border: #E4D6C5;
+  --muted: #F0E4D8;
+  --primary: #6E263D;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #542033;
+  --primary-active: #431929;
+  --ring: #B18A55;
+  --primary-disabled: #D8C5C8;
+  --primary-disabled-foreground: #78666A;
+  --button-secondary-foreground: #6E263D;
+  --button-secondary-border: #6E263D;
+  --button-secondary-hover: #F0E4E8;
+  --button-secondary-hover-foreground: #542033;
+  --link: #6E263D;
+  --link-hover: #542033;
+  --input-surface: #FFFCF7;
+  --input: #CDBBA9;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+.dark, [data-theme="dark"] {
+  --background: #21191B;
+  --foreground: #F7F1E8;
+  --card: #2D2326;
+  --popover: #382B2F;
+  --muted-foreground: #D2C3B9;
+  --border: #554148;
+  --muted: #463238;
+  --primary: #B77A8D;
+  --primary-foreground: #21191B;
+  --primary-hover: #C98F9F;
+  --primary-active: #A9687C;
+  --ring: #D0AC78;
+  --primary-disabled: #554148;
+  --primary-disabled-foreground: #B9A9AA;
+  --button-secondary-foreground: #F0D9DF;
+  --button-secondary-border: #B77A8D;
+  --button-secondary-hover: #463238;
+  --button-secondary-hover-foreground: #FFFFFF;
+  --link: #E5B9C5;
+  --link-hover: #FFFFFF;
+  --input-surface: #382B2F;
+  --input: #554148;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
+
+:root, .dark, [data-theme="dark"] {
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --accent: var(--muted);
+  --accent-foreground: var(--foreground);
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+/* Design-system heading classes also work on elements with a different semantic rank. */
+@utility type-h1 {
+  @apply font-heading text-h1;
+}
+
+@utility type-h2 {
+  @apply font-heading text-h2;
+}
+
+@utility type-h3 {
+  @apply font-heading text-h3;
+}
+
+@utility type-h4 {
+  @apply font-body text-h4;
+}
+
+@utility type-h5 {
+  @apply font-body text-h5;
+}
+
+@utility type-h6 {
+  @apply font-body text-h6;
+}
+
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground text-body;
   }
+  h1 { @apply type-h1; }
+  h2 { @apply type-h2; }
+  h3 { @apply type-h3; }
+  h4 { @apply type-h4; }
+  h5 { @apply type-h5; }
+  h6 { @apply type-h6; }
+
   html {
     @apply font-sans;
   }
