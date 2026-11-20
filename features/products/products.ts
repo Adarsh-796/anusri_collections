@@ -1,0 +1,38 @@
+export const boutiqueProducts = [
+  {
+    id: "crimson-kanjeevaram",
+    title: "Royal Crimson Kanjeevaram Silk Saree",
+    category: "Kanjeevaram Silk",
+    price: 18500,
+    badge: { variant: "new", label: "New Arrival" },
+    image: "/sarees/saree-1.png",
+    href: "/shop/crimson-kanjeevaram",
+  },
+  {
+    id: "banarasi-organza",
+    title: "Pastel Blush Banarasi Organza Saree",
+    category: "Banarasi Organza",
+    price: 14200,
+    badge: { variant: "heirloom", label: "Heirloom" },
+    image: "/sarees/saree-2.png",
+    href: "/shop/banarasi-organza",
+  },
+  {
+    id: "emerald-chanderi",
+    title: "Deep Emerald Green Chanderi Saree",
+    category: "Chanderi Handloom",
+    price: 12800,
+    badge: null,
+    image: "/sarees/saree-3.png",
+    href: "/shop/emerald-chanderi",
+  },
+  {
+    id: "antique-gold-tissue-silk",
+    title: "Antique Gold Tissue Silk Saree",
+    category: "Tissue Silk",
+    price: 22000,
+    badge: { variant: "bridal", label: "Bridal Edition" },
+    image: "/sarees/saree-4.png",
+    href: "/shop/antique-gold-tissue-silk",
+  },
+] as const;
