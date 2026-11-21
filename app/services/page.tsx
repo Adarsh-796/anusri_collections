@@ -39,12 +39,12 @@ export default function ServicesPage() {
     <main className="px-gutter py-section">
       <h1 className="mb-8">Services</h1>
       <ServiceGrid>
-        {services.map(({ title, description, image, alt, Icon }) => (
+        {services.map(({ title, description, image, alt, Icon }, index) => (
           <ServiceCard key={title}>
             <ServiceCardImage
               src={image}
               alt={alt}
-              loading="eager"
+              loading={index === 0 ? "eager" : "lazy"}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             />
             <ServiceCardContent>

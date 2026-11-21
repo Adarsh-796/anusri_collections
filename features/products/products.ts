@@ -14,7 +14,7 @@ export const boutiqueProducts = [
     category: "Banarasi Organza",
     price: 14200,
     badge: { variant: "heirloom", label: "Heirloom" },
-    image: "/sarees/saree-2.png",
+    image: "/sarees/saree-3.png",
     href: "/sarees/banarasi-organza",
   },
   {
@@ -23,7 +23,7 @@ export const boutiqueProducts = [
     category: "Chanderi Handloom",
     price: 12800,
     badge: null,
-    image: "/sarees/saree-3.png",
+    image: "/sarees/saree-2.png",
     href: "/sarees/emerald-chanderi",
   },
   {
