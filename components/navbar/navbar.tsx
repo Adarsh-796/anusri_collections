@@ -4,19 +4,14 @@ import { NavbarDrawer } from "./navbar-drawer";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarNavigation } from "./navbar-navigation";
 
-interface NavbarProps {
-  logoImage?: ComponentProps<typeof NavbarLogo>["image"];
-  cartCount?: number;
-}
-
-export function Navbar({ logoImage, cartCount }: NavbarProps) {
+export function Navbar() {
   return (
-    <header className="border-b border-border bg-background font-body">
-      <div className="mx-auto flex min-h-[76px] max-w-[101rem] items-center justify-between gap-x-2 px-gutter lg:gap-x-4">
-        <NavbarLogo image={logoImage} />
+    <header className="sticky top-0 z-4 border-b border-border bg-background font-body">
+      <div className="mx-auto flex items-center justify-between gap-x-2 px-gutter lg:gap-x-4 py-4">
+        <NavbarLogo />
         <NavbarNavigation />
         <div className="flex shrink-0 items-center gap-1">
-          <NavbarActions cartCount={cartCount} />
+          <NavbarActions />
           <NavbarDrawer />
         </div>
       </div>

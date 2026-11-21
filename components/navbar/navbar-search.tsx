@@ -4,7 +4,7 @@ import { Popover } from "@base-ui/react/popover";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { collectionLinks } from "./navbar-items";
+import { collectionLinks } from "@/lib/consts";
 
 export function NavbarSearch({ className }: { className: string }) {
   const inputRef = useRef<HTMLInputElement>(null);

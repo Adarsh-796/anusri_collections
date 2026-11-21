@@ -13,9 +13,9 @@ export function NavbarLink({
   return (
     <Link
       {...props}
-      aria-current={active ? "page" : props["aria-current"]}
+      aria-current={props["aria-current"] ?? (active ? "page" : undefined)}
       className={cn(
-        "flex min-h-11 items-center whitespace-nowrap hover:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring motion-safe:transition-colors",
+        "flex min-h-11 text-[1.1rem] items-center whitespace-nowrap hover:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring motion-safe:transition-colors",
         active && "text-link",
         className,
       )}
