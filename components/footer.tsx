@@ -1,12 +1,4 @@
-import {
-  Camera,
-  Clock,
-  Mail,
-  MapPin,
-  MessageSquare,
-  Phone,
-  Share2,
-} from "lucide-react";
+import { Clock, Mail, MapPin, MessageSquare, Phone } from "lucide-react";
 import Link from "next/link";
 
 const quickLinks = [
@@ -25,7 +17,8 @@ const shopLinks = [
   { label: "Bead Work & Customization", href: "/services/bead-work" },
 ];
 
-const address = "Heritage Lane, Banjara Hills, Hyderabad, India";
+const address =
+  "12-2-826/A/40, LIC Colony, Mehedipatnam, Hyderabad, Telangana - 500028";
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 const email = "concierge@anusricollections.com";
 const linkClassName =
@@ -58,7 +51,7 @@ function FooterLinks({ title, links }: FooterLinksProps) {
 
 export function Footer() {
   return (
-    <footer className="mt-auto rounded-b-3xl bg-espresso font-body text-ivory/90">
+    <footer className="mt-auto bg-espresso font-body text-ivory/90">
       <div className="mx-auto max-w-[101rem] px-gutter pt-6 pb-5 sm:pt-9 lg:pt-10">
         <div className="grid grid-cols-1 gap-x-8 gap-y-7 text-sm leading-snug sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.25fr]">
           <div>
@@ -78,20 +71,18 @@ export function Footer() {
               fashion with curated sarees, handcrafted fabrics, and bespoke
               boutique couture.
             </p>
-            <div className="mt-4 flex gap-2">
-              <Link
-                href="/saris"
-                aria-label="Browse the saree collection"
-                className={iconLinkClassName}
-              >
-                <Camera size={15} aria-hidden="true" />
-              </Link>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
               <a
-                href="mailto:?subject=ANUSRI%20Collections"
-                aria-label="Share by email"
-                className={iconLinkClassName}
+                href="https://www.instagram.com/_anusricollection/"
+                className={linkClassName}
               >
-                <Share2 size={15} aria-hidden="true" />
+                Instagram
+              </a>
+              <a
+                href="https://www.facebook.com/people/Anusri-Collection/61596424963024/"
+                className={linkClassName}
+              >
+                Facebook
               </a>
               <a
                 href={mapsHref}
@@ -125,8 +116,8 @@ export function Footer() {
                 </li>
                 <li className="flex items-start gap-2">
                   <Phone size={14} aria-hidden="true" />
-                  <a href="tel:+919849012345" className={linkClassName}>
-                    +91 98490 12345
+                  <a href="tel:+918019167233" className={linkClassName}>
+                    +91 80191 67233
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
