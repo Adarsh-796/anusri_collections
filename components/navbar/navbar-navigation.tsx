@@ -13,20 +13,15 @@ export function NavbarNavigation() {
       aria-label="Main navigation"
       className="hidden items-center justify-center gap-x-6 self-stretch font-medium text-text-secondary min-[1200px]:flex"
     >
-      {navbarItems.map(({ href, label }) => {
-        const current = getNavbarLinkCurrent(pathname, href);
-
-        return (
-          <NavbarLink
-            key={href}
-            href={href}
-            active={current !== undefined}
-            aria-current={current}
-          >
-            {label}
-          </NavbarLink>
-        );
-      })}
+      {navbarItems.map(({ href, label }) => (
+        <NavbarLink
+          key={href}
+          href={href}
+          aria-current={getNavbarLinkCurrent(pathname, href)}
+        >
+          {label}
+        </NavbarLink>
+      ))}
     </NavbarLinkGroup>
   );
 }

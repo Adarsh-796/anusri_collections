@@ -74,10 +74,10 @@ export function useWishlistCount() {
   return useSyncExternalStore(subscribe, () => getSnapshot().size, () => 0);
 }
 
-export function useIsWishlisted(id: string | undefined) {
+export function useIsWishlisted(id: string) {
   return useSyncExternalStore(
     subscribe,
-    () => id !== undefined && getSnapshot().has(id),
+    () => getSnapshot().has(id),
     () => false,
   );
 }
