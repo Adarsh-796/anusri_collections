@@ -38,6 +38,8 @@ const badgeColors = {
   new: "bg-burgundy",
   heirloom: "bg-gold",
   bridal: "bg-burgundy",
+  festive: "bg-ivory text-espresso",
+  trending: "bg-burgundy",
 };
 
 type ProductCardBadgeProps = ComponentProps<"span"> & {

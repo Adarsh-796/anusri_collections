@@ -36,3 +36,40 @@ export const boutiqueProducts = [
     href: "/sarees/antique-gold-tissue-silk",
   },
 ] as const;
+
+export const dressProducts = [
+  {
+    id: "burgundy-velvet-anarkali",
+    title: "Burgundy Velvet Embroidered Anarkali Set",
+    category: "Couture Anarkali",
+    price: 16500,
+    image: "/dresses/dress-2.png",
+    href: "/dresses/burgundy-velvet-anarkali",
+  },
+  {
+    id: "ivory-gold-georgette-gown",
+    title: "Ivory & Gold Georgette Floor-Length Gown",
+    category: "Festive Gown",
+    price: 15200,
+    badge: { variant: "festive", label: "Festive Edit" },
+    image: "/dresses/dress-1.png",
+    href: "/dresses/ivory-gold-georgette-gown",
+  },
+  {
+    id: "muted-rose-sharara",
+    title: "Muted Rose Tiered Festive Sharara Set",
+    category: "Sharara Set",
+    price: 13800,
+    image: "/dresses/dress-3.png",
+    href: "/dresses/muted-rose-sharara",
+  },
+  {
+    id: "royal-blue-silk-cape",
+    title: "Royal Blue Handloom Silk Cape Set",
+    category: "Cape Ensemble",
+    price: 17400,
+    badge: { variant: "trending", label: "Trending" },
+    image: "/dresses/dress-4.png",
+    href: "/dresses/royal-blue-silk-cape",
+  },
+] as const;

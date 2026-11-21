@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { ArrowLink } from "@/components/arrow-link";
+import { cn } from "@/lib/utils";
 
 import { BoutiqueProductGrid, type BoutiqueProduct } from "./boutique-product-grid";
 
@@ -14,6 +15,7 @@ interface ProductShowcaseProps {
     label: string;
   };
   products: readonly BoutiqueProduct[];
+  className?: string;
 }
 
 const imageSizes =
@@ -26,6 +28,7 @@ export function ProductShowcase({
   description,
   viewAll,
   products,
+  className,
 }: ProductShowcaseProps) {
   const headingId = `${id}-title`;
 
@@ -33,7 +36,10 @@ export function ProductShowcase({
     <section
       id={id}
       aria-labelledby={headingId}
-      className="bg-[#f8efe8] px-[clamp(1rem,3.6vw,3rem)] py-section dark:bg-background"
+      className={cn(
+        "bg-[#f8efe8] px-[clamp(1rem,3.6vw,3rem)] py-section dark:bg-background",
+        className,
+      )}
     >
       <div className="mx-auto w-full max-w-md sm:max-w-none">
         <header className="mb-[clamp(1rem,3.3vw,2.5rem)] flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
