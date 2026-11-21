@@ -3,7 +3,7 @@ import Image, { type ImageProps } from "next/image";
 interface CollectionCardImageProps {
   image: ImageProps["src"];
   alt?: string;
-  sizes?: string;
+  sizes: string;
   objectPosition?: string;
 }
 

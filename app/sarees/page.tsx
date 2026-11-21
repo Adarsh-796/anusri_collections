@@ -1,8 +1,10 @@
-export default function SarisPage() {
+import { BoutiqueProductGrid } from "@/features/products/components/boutique-product-grid";
+
+export default function SareesPage() {
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-gutter py-section">
-      <h1>Sarees</h1>
-      <p className="mt-4 text-text-secondary">This page is coming soon.</p>
+    <main className="py-section">
+      <h1 className="mb-8 px-gutter">Sarees</h1>
+      <BoutiqueProductGrid />
     </main>
   );
 }

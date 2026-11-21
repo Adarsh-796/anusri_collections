@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Heart, ShoppingBag } from "lucide-react";
+import { useWishlistCount } from "@/features/products/wishlist";
 import { NavbarLinkGroup } from "./navbar-link-group";
 
 const actionClassName =
@@ -23,8 +24,7 @@ function CountBadge({ count }: { count: number }) {
 
 export function NavbarActions() {
   const pathname = usePathname();
-  const shoppingCount = 4;
-  const likeCount = 0;
+  const likeCount = useWishlistCount();
   return (
     <NavbarLinkGroup
       pathname={pathname}
@@ -42,14 +42,11 @@ export function NavbarActions() {
       </Link>
       <Link
         href="/cart"
-        aria-label={
-          shoppingCount > 0 ? `Cart, ${shoppingCount} in cart` : "Cart"
-        }
+        aria-label="Cart"
         aria-current={pathname === "/cart" ? "page" : undefined}
         className={actionClassName}
       >
         <ShoppingBag aria-hidden="true" className="size-6" />
-        <CountBadge count={shoppingCount} />
       </Link>
     </NavbarLinkGroup>
   );

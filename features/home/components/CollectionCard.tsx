@@ -6,7 +6,10 @@ interface CollectionCardProps {
 
 /* 
         <CollectionCard>
-          <CollectionCardImage image="/collections/dresses.png" />
+          <CollectionCardImage
+            image="/collections/sarees.png"
+            sizes="100vw"
+          />
           <CollectionCardOverlay />
           <CollectionCardContent>
             <CollectionEyebrow>Traditional Weaves</CollectionEyebrow>
@@ -14,7 +17,7 @@ interface CollectionCardProps {
             <CollectionDescription>
               Pure Kanjeevarams, Banarasi, Chanderi &amp; Organza drapings.
             </CollectionDescription>
-            <CollectionCardLink href="/shop/sarees">
+            <CollectionCardLink href="/sarees">
               Explore Collection
             </CollectionCardLink>
           </CollectionCardContent>

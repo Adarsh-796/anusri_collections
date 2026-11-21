@@ -85,11 +85,12 @@ export function ServiceCardIcon({
 }
 
 export function ServiceCardTitle({
+  as: Heading = "h3",
   className,
   ...props
-}: ComponentProps<"h3">) {
+}: ComponentProps<"h3"> & { as?: "h2" | "h3" }) {
   return (
-    <h3
+    <Heading
       {...props}
       className={cn(
         "font-heading text-2xl leading-tight font-semibold sm:text-[28px]",

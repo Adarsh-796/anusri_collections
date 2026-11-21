@@ -4,18 +4,21 @@ import { useState, type ComponentProps } from "react";
 import { Heart } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { setWishlisted, useIsWishlisted } from "../wishlist";
 
 type ProductCardWishlistProps = Omit<
   ComponentProps<"button">,
   "aria-pressed" | "children" | "onClick" | "type"
 > & {
   active?: boolean;
+  productId?: string;
   defaultActive?: boolean;
   onToggle?: (active: boolean) => void;
 };
 
 export function ProductCardWishlist({
   active,
+  productId,
   defaultActive = false,
   onToggle,
   className,
@@ -23,7 +26,8 @@ export function ProductCardWishlist({
   ...props
 }: ProductCardWishlistProps) {
   const [saved, setSaved] = useState(defaultActive);
-  const isActive = active ?? saved;
+  const isWishlisted = useIsWishlisted(active === undefined ? productId : undefined);
+  const isActive = active ?? (productId ? isWishlisted : saved);
 
   return (
     <button
@@ -37,7 +41,10 @@ export function ProductCardWishlist({
       )}
       onClick={() => {
         const next = !isActive;
-        if (active === undefined) setSaved(next);
+        if (active === undefined) {
+          if (productId) setWishlisted(productId, next);
+          else setSaved(next);
+        }
         onToggle?.(next);
       }}
     >

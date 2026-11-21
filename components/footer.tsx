@@ -9,7 +9,7 @@ const quickLinks = [
 ];
 
 const shopLinks = [
-  { label: "Heritage Sarees", href: "/saris" },
+  { label: "Heritage Sarees", href: "/sarees" },
   { label: "Bespoke Dresses", href: "/dresses" },
   { label: "Handcrafted Fabrics", href: "/fabrics" },
   { label: "Custom Stitching", href: "/services/custom-stitching" },

@@ -13,11 +13,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { getNavbarLinkCurrent } from "./navbar-link";
 
 const iconButton =
   "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-sm text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-ring";
 const linkStyle =
-  "flex min-h-11 items-center rounded-sm px-3 aria-[current=page]:bg-link aria-[current=page]:font-semibold aria-[current=page]:text-background focus-visible:outline-2 focus-visible:outline-ring";
+  "flex min-h-11 items-center rounded-sm px-3 aria-[current]:bg-link aria-[current]:font-semibold aria-[current]:text-background focus-visible:outline-2 focus-visible:outline-ring";
 
 export function NavbarDrawer() {
   const pathname = usePathname();
@@ -49,7 +50,7 @@ export function NavbarDrawer() {
             <Link
               key={href}
               href={href}
-              aria-current={pathname === href ? "page" : undefined}
+              aria-current={getNavbarLinkCurrent(pathname, href)}
               className={linkStyle}
               onNavigate={() => setOpen(false)}
             >

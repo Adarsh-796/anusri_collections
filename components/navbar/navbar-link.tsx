@@ -4,6 +4,11 @@ import { cn } from "@/lib/utils";
 
 type NavbarLinkProps = ComponentProps<typeof Link> & { active?: boolean };
 
+export function getNavbarLinkCurrent(pathname: string, href: string) {
+  if (pathname === href) return "page";
+  if (href !== "/" && pathname.startsWith(`${href}/`)) return "location";
+}
+
 export function NavbarLink({
   active,
   className,

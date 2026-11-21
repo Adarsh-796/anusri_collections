@@ -33,7 +33,7 @@ export function NavbarDropdown({
         closeDelay={120}
         data-active-section={active ? "" : undefined}
         className={cn(
-          "group/nav-menu flex min-h-11 cursor-pointer items-center gap-1 rounded-sm whitespace-nowrap hover:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring aria-expanded:text-link motion-safe:transition-colors lg:min-h-[76px]",
+          "group/nav-menu flex min-h-11 cursor-pointer items-center gap-1 rounded-sm whitespace-nowrap hover:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring aria-expanded:text-link motion-safe:transition-colors lg:min-h-19",
           active && "text-link",
         )}
       >

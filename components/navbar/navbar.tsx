@@ -1,4 +1,3 @@
-import type { ComponentProps } from "react";
 import { NavbarActions } from "./navbar-actions";
 import { NavbarDrawer } from "./navbar-drawer";
 import { NavbarLogo } from "./navbar-logo";

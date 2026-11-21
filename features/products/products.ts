@@ -6,7 +6,7 @@ export const boutiqueProducts = [
     price: 18500,
     badge: { variant: "new", label: "New Arrival" },
     image: "/sarees/saree-1.png",
-    href: "/shop/crimson-kanjeevaram",
+    href: "/sarees/crimson-kanjeevaram",
   },
   {
     id: "banarasi-organza",
@@ -15,7 +15,7 @@ export const boutiqueProducts = [
     price: 14200,
     badge: { variant: "heirloom", label: "Heirloom" },
     image: "/sarees/saree-2.png",
-    href: "/shop/banarasi-organza",
+    href: "/sarees/banarasi-organza",
   },
   {
     id: "emerald-chanderi",
@@ -24,7 +24,7 @@ export const boutiqueProducts = [
     price: 12800,
     badge: null,
     image: "/sarees/saree-3.png",
-    href: "/shop/emerald-chanderi",
+    href: "/sarees/emerald-chanderi",
   },
   {
     id: "antique-gold-tissue-silk",
@@ -33,6 +33,6 @@ export const boutiqueProducts = [
     price: 22000,
     badge: { variant: "bridal", label: "Bridal Edition" },
     image: "/sarees/saree-4.png",
-    href: "/shop/antique-gold-tissue-silk",
+    href: "/sarees/antique-gold-tissue-silk",
   },
 ] as const;
