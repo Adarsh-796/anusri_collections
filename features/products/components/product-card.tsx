@@ -1,10 +1,14 @@
 import type { ComponentProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Scissors } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export function ProductCard({ className, ...props }: ComponentProps<"article">) {
+export function ProductCard({
+  className,
+  ...props
+}: ComponentProps<"article">) {
   return (
     <article
       {...props}
@@ -16,11 +20,17 @@ export function ProductCard({ className, ...props }: ComponentProps<"article">) 
   );
 }
 
-export function ProductCardMedia({ className, ...props }: ComponentProps<"div">) {
+export function ProductCardMedia({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className={cn("relative isolate aspect-3/4 overflow-hidden bg-muted", className)}
+      className={cn(
+        "relative isolate aspect-3/4 overflow-hidden bg-muted",
+        className,
+      )}
     />
   );
 }
@@ -30,8 +40,19 @@ type ProductCardImageProps = Omit<
   "fill" | "width" | "height"
 >;
 
-export function ProductCardImage({ alt, className, ...props }: ProductCardImageProps) {
-  return <Image {...props} alt={alt} fill className={cn("object-cover", className)} />;
+export function ProductCardImage({
+  alt,
+  className,
+  ...props
+}: ProductCardImageProps) {
+  return (
+    <Image
+      {...props}
+      alt={alt}
+      fill
+      className={cn("object-cover", className)}
+    />
+  );
 }
 
 const badgeColors = {
@@ -58,7 +79,7 @@ export function ProductCardBadge({
     <span
       {...props}
       className={cn(
-        "absolute start-4 top-4 rounded-button px-3 py-1.5 text-sm leading-tight font-semibold tracking-wide text-white uppercase shadow-product",
+        "absolute inset-s-4 top-4 rounded-button px-3 py-1.5 text-sm leading-tight font-semibold tracking-wide text-white uppercase shadow-product",
         badgeColors[variant],
         className,
       )}
@@ -86,6 +107,23 @@ export function ProductCardAction({
   );
 }
 
+export function ProductCardFabricLink({
+  className,
+  ...props
+}: ComponentProps<typeof Link>) {
+  return (
+    <Link
+      {...props}
+      className={cn(
+        "-me-2 grid size-11 shrink-0 place-items-center rounded-full text-[#8a6236] hover:text-primary focus-visible:outline-2 focus-visible:outline-ring after:absolute after:inset-0 after:rounded-lg focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring dark:text-gold",
+        className,
+      )}
+    >
+      <Scissors aria-hidden="true" className="size-4" />
+    </Link>
+  );
+}
+
 export function ProductCardContent({
   className,
   ...props
@@ -105,25 +143,40 @@ export function ProductCardCategory({
   return (
     <p
       {...props}
-      className={cn("text-body-sm tracking-wide text-text-secondary uppercase", className)}
+      className={cn(
+        "text-body-sm tracking-wide text-text-secondary uppercase",
+        className,
+      )}
     />
   );
 }
 
-export function ProductCardTitle({ className, ...props }: ComponentProps<"h3">) {
+export function ProductCardTitle({
+  className,
+  ...props
+}: ComponentProps<"h3">) {
   return (
     <h3
       {...props}
-      className={cn("font-body text-xl leading-7 font-semibold wrap-break-word", className)}
+      className={cn(
+        "font-body text-xl leading-7 font-semibold wrap-break-word",
+        className,
+      )}
     />
   );
 }
 
-export function ProductCardFooter({ className, ...props }: ComponentProps<"div">) {
+export function ProductCardFooter({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className={cn("mt-auto flex items-center justify-between gap-2 pt-1", className)}
+      className={cn(
+        "mt-auto flex items-center justify-between gap-2 pt-1",
+        className,
+      )}
     />
   );
 }
@@ -137,19 +190,31 @@ const rupees = new Intl.NumberFormat("en-IN", {
 
 type ProductCardPriceProps = Omit<ComponentProps<"p">, "children"> & {
   children: number | string;
+  unit?: string;
 };
 
 export function ProductCardPrice({
   className,
   children,
+  unit,
   ...props
 }: ProductCardPriceProps) {
   return (
     <p
       {...props}
-      className={cn("text-2xl leading-tight font-semibold text-primary tabular-nums", className)}
+      className={cn(
+        "text-2xl leading-tight font-semibold text-primary tabular-nums",
+        className,
+      )}
     >
       {typeof children === "number" ? rupees.format(children) : children}
+      {unit ? (
+        <span className="ms-1 text-[0.65em] font-normal text-text-secondary">
+          <span aria-hidden="true">/ </span>
+          <span className="sr-only">per </span>
+          {unit}
+        </span>
+      ) : null}
     </p>
   );
 }

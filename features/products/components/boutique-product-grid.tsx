@@ -6,6 +6,7 @@ import {
   ProductCardBadge,
   ProductCardCategory,
   ProductCardContent,
+  ProductCardFabricLink,
   ProductCardFooter,
   ProductCardImage,
   ProductCardMedia,
@@ -26,6 +27,7 @@ export interface BoutiqueProduct {
   href: ComponentProps<typeof ProductCardAction>["href"];
   category: string;
   price: number | string;
+  priceUnit?: "meter";
 }
 
 interface BoutiqueProductGridProps {
@@ -46,9 +48,12 @@ export function BoutiqueProductGrid({
   return (
     <ProductGrid className={className}>
       {products.map(
-        ({ id, image, title, badge, href, category, price }, index) => (
-          <ProductCard key={id} className="@container min-w-0">
-            <ProductCardMedia>
+        ({ id, image, title, badge, href, category, price, priceUnit }, index) => (
+          <ProductCard
+            key={id}
+            className={priceUnit ? "@container relative min-w-0 bg-[#fcf6f4] dark:bg-surface" : "@container min-w-0"}
+          >
+            <ProductCardMedia className={priceUnit ? "aspect-square" : undefined}>
               <ProductCardImage
                 src={image}
                 alt={title}
@@ -63,13 +68,15 @@ export function BoutiqueProductGrid({
                   {badge.label}
                 </ProductCardBadge>
               )}
-              <ProductCardAction
-                href={href}
-                prefetch={productLinkPrefetch}
-                aria-label={`View product: ${title}`}
-              >
-                View Product
-              </ProductCardAction>
+              {priceUnit ? null : (
+                <ProductCardAction
+                  href={href}
+                  prefetch={productLinkPrefetch}
+                  aria-label={`View product: ${title}`}
+                >
+                  View Product
+                </ProductCardAction>
+              )}
             </ProductCardMedia>
             <ProductCardContent className="gap-[clamp(0.25rem,2cqw,0.5rem)] px-[clamp(0.75rem,5.5cqw,1.25rem)] pt-[clamp(0.75rem,6cqw,1.5rem)] pb-[clamp(0.25rem,3cqw,0.875rem)]">
               <ProductCardCategory className="text-[clamp(0.6875rem,4.1cqw,0.875rem)] leading-normal">
@@ -79,13 +86,24 @@ export function BoutiqueProductGrid({
                 {title}
               </ProductCardTitle>
               <ProductCardFooter className="pt-0">
-                <ProductCardPrice className="text-[clamp(0.875rem,6.5cqw,1.5rem)]">
+                <ProductCardPrice
+                  className="text-[clamp(0.875rem,6.5cqw,1.5rem)]"
+                  unit={priceUnit}
+                >
                   {price}
                 </ProductCardPrice>
-                <ProductCardWishlist
-                  productId={id}
-                  aria-label={`Wishlist: ${title}`}
-                />
+                {priceUnit ? (
+                  <ProductCardFabricLink
+                    href={href}
+                    prefetch={productLinkPrefetch}
+                    aria-label={`View fabric: ${title}`}
+                  />
+                ) : (
+                  <ProductCardWishlist
+                    productId={id}
+                    aria-label={`Wishlist: ${title}`}
+                  />
+                )}
               </ProductCardFooter>
             </ProductCardContent>
           </ProductCard>

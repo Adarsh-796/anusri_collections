@@ -1,7 +1,7 @@
 import { CollectionsSection } from "@/features/home/components/collections-section";
 import { HeroComponent } from "@/features/home/components/hero-component";
 import { ProductShowcase } from "@/features/products/components/product-showcase";
-import { boutiqueProducts, dressProducts } from "@/features/products/products";
+import { boutiqueProducts, dressProducts, fabricProducts } from "@/features/products/products";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,6 +31,15 @@ export default function Home() {
         viewAll={{ href: "/dresses", label: "View All Dresses" }}
         products={dressProducts}
         className="bg-[#fcf6f4]"
+      />
+      <ProductShowcase
+        id="textile-atelier"
+        eyebrow="Textile Atelier"
+        title="The Beauty Begins With the Fabric."
+        description="Discover beautiful fabrics and materials that inspire unique styles and personalized creations."
+        viewAll={{ href: "/fabrics", label: "View All Fabrics" }}
+        products={fabricProducts}
+        className="bg-[#fcf9f4]"
       />
     </main>
   );

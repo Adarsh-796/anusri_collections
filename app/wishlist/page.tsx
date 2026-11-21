@@ -1,7 +1,7 @@
 import { WishlistItems } from "@/features/products/components/wishlist-items";
-import { boutiqueProducts, dressProducts } from "@/features/products/products";
+import { boutiqueProducts, dressProducts, fabricProducts } from "@/features/products/products";
 
-const wishlistProducts = [...boutiqueProducts, ...dressProducts].map(
+const wishlistProducts = [...boutiqueProducts, ...dressProducts, ...fabricProducts].map(
   ({ id, title, href }) => ({ id, title, href }),
 );
 

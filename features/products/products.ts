@@ -73,3 +73,42 @@ export const dressProducts = [
     href: "/dresses/royal-blue-silk-cape",
   },
 ] as const;
+
+export const fabricProducts = [
+  {
+    id: "banarasi-pure-brocade",
+    title: "Handwoven Banarasi Pure Brocade Fabric",
+    category: "Pure Brocade Silk",
+    price: 2850,
+    priceUnit: "meter",
+    image: "/fabrics/fabric-1.png",
+    href: "/fabrics/banarasi-pure-brocade",
+  },
+  {
+    id: "antique-gold-zari-raw-silk",
+    title: "Raw Silk Fabric with Antique Gold Zari Motifs",
+    category: "Raw Silk",
+    price: 1950,
+    priceUnit: "meter",
+    image: "/fabrics/fabric-2.png",
+    href: "/fabrics/antique-gold-zari-raw-silk",
+  },
+  {
+    id: "floral-organza-pearl-scallop",
+    title: "Sheer Floral Organza Silk with Pearl Scallop",
+    category: "Organza Silk",
+    price: 1450,
+    priceUnit: "meter",
+    image: "/fabrics/fabric-3.png",
+    href: "/fabrics/floral-organza-pearl-scallop",
+  },
+  {
+    id: "mukaish-embroidered-net",
+    title: "Embroidered Net Fabric with Delicate Mukaish",
+    category: "Hand Embroidered Net",
+    price: 1750,
+    priceUnit: "meter",
+    image: "/fabrics/mukaish-embroidered-net.webp",
+    href: "/fabrics/mukaish-embroidered-net",
+  },
+] as const;
