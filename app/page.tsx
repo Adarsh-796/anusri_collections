@@ -1,3 +1,4 @@
+import { CollectionsSection } from "@/features/home/components/collections-section";
 import { HeroComponent } from "@/features/home/components/hero-component";
 import type { Metadata } from "next";
 
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <main>
       <HeroComponent />
+      <CollectionsSection />
     </main>
   );
 }

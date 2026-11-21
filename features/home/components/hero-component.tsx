@@ -22,7 +22,7 @@ export function HeroComponent() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 min-[1200px]:pointer-fine:bg-linear-[90deg,#f8e6d059,#f8e6d02e_43%,transparent_65%]"
       />
-      <div className="relative z-1 w-full max-w-144 max-md:rounded-md max-md:bg-ivory/90 max-md:p-3 md:max-w-[57%]">
+      <div className="relative z-1 w-full max-w-xl max-md:rounded-md max-md:bg-ivory/90 max-md:p-3 md:max-w-[57%]">
         <p className="mb-2 flex items-center gap-3 text-sm font-bold tracking-eyebrow text-[#794718] uppercase after:h-px after:w-10 after:shrink-0 after:bg-gold">
           Anusri Collections
         </p>
@@ -35,8 +35,8 @@ export function HeroComponent() {
           Into Every Thread.
         </h1>
         <p className="mt-3 max-w-[38ch] text-base/6 font-medium text-espresso lg:text-lg/6">
-          Discover timeless sarees, beautiful fabrics, and thoughtfully
-          crafted designs that celebrate the beauty of tradition.
+          Discover timeless sarees, beautiful fabrics, and thoughtfully crafted
+          designs that celebrate the beauty of tradition.
         </p>
 
         <div className="mt-5 w-fit max-w-full max-[456px]:w-full">

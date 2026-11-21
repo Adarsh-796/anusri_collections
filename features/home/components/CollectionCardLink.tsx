@@ -14,12 +14,12 @@ export function CollectionCardLink({
   return (
     <Link
       href={href}
-      className="group/cta mt-1 inline-flex items-center gap-3 rounded-sm font-body text-sm leading-5 tracking-wide text-gold uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
+      className="group/cta mt-1 inline-flex items-center gap-2 rounded-sm font-body text-[clamp(0.6875rem,3.4cqw,0.875rem)] leading-normal tracking-wide text-[#e6b578] uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
     >
       {children}
       <ArrowRight
         aria-hidden="true"
-        className="size-4 shrink-0 motion-safe:transition-transform motion-safe:group-hover/collection:translate-x-1 motion-safe:group-hover/cta:translate-x-1 motion-safe:group-focus-visible/cta:translate-x-1"
+        className="size-[1em] shrink-0 motion-safe:transition-transform motion-safe:group-hover/collection:translate-x-1 motion-safe:group-hover/cta:translate-x-1 motion-safe:group-focus-visible/cta:translate-x-1"
       />
     </Link>
   );

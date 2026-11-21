@@ -6,7 +6,7 @@ interface CollectionDescriptionProps {
 
 export function CollectionDescription({ children }: CollectionDescriptionProps) {
   return (
-    <p className="font-body text-base leading-relaxed text-ivory/90 lg:text-lg lg:leading-normal">
+    <p className="max-w-[42ch] font-body text-[clamp(0.875rem,4.2cqw,1.125rem)] leading-normal text-ivory/90">
       {children}
     </p>
   );

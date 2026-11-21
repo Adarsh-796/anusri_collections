@@ -1,34 +1,19 @@
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 interface CollectionCardProps {
   children: ReactNode;
+  className?: string;
 }
 
-/* 
-        <CollectionCard>
-          <CollectionCardImage
-            image="/collections/sarees.png"
-            sizes="100vw"
-          />
-          <CollectionCardOverlay />
-          <CollectionCardContent>
-            <CollectionEyebrow>Traditional Weaves</CollectionEyebrow>
-            <CollectionTitle>Sarees</CollectionTitle>
-            <CollectionDescription>
-              Pure Kanjeevarams, Banarasi, Chanderi &amp; Organza drapings.
-            </CollectionDescription>
-            <CollectionCardLink href="/sarees">
-              Explore Collection
-            </CollectionCardLink>
-          </CollectionCardContent>
-        </CollectionCard> 
-*/
-
-export function CollectionCard({ children }: CollectionCardProps) {
+export function CollectionCard({ children, className }: CollectionCardProps) {
   return (
     <article
       data-slot="collection-card"
-      className="group/collection relative isolate grid aspect-3/4 w-full items-end overflow-hidden rounded-[10px] bg-espresso text-ivory"
+      className={cn(
+        "group/collection @container relative isolate flex aspect-square min-w-0 flex-col justify-end overflow-hidden rounded-lg bg-espresso text-ivory sm:aspect-4/5 lg:aspect-3/4",
+        className,
+      )}
     >
       {children}
     </article>

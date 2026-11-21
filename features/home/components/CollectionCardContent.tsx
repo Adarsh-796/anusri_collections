@@ -8,7 +8,7 @@ export function CollectionCardContent({
   children,
 }: CollectionCardContentProps) {
   return (
-    <div className="flex min-w-0 flex-col items-start gap-2 p-5 sm:p-7.5">
+    <div className="flex min-w-0 flex-col items-start gap-[clamp(0.25rem,1.6cqw,0.5rem)] p-[clamp(1rem,6cqw,1.875rem)]">
       {children}
     </div>
   );
