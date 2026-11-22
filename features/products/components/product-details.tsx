@@ -21,10 +21,10 @@ export function ProductDetails({
         <Image
           src={product.image}
           alt={product.title}
-          fill
+          width={512}
+          height={product.priceUnit === "meter" ? 512 : 686}
           loading="eager"
-          sizes="(min-width: 64rem) 28rem, (min-width: 48rem) 50vw, 100vw"
-          className="object-cover"
+          className="absolute inset-0 size-full object-cover"
         />
       </div>
       <div>
