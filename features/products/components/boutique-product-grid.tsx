@@ -13,7 +13,7 @@ import {
   ProductCardPrice,
   ProductCardTitle,
 } from "./product-card";
-import { ProductCardWishlist } from "./product-card-wishlist";
+import { AddToCartButton } from "./add-to-cart-button";
 import { ProductGrid } from "./product-grid";
 
 export interface BoutiqueProduct {
@@ -98,13 +98,9 @@ export function BoutiqueProductGrid({
                     prefetch={productLinkPrefetch}
                     aria-label={`View fabric: ${title}`}
                   />
-                ) : (
-                  <ProductCardWishlist
-                    productId={id}
-                    aria-label={`Wishlist: ${title}`}
-                  />
-                )}
+                ) : null}
               </ProductCardFooter>
+              <AddToCartButton productId={id} title={title} unit={priceUnit} className="relative z-10 w-full text-xs sm:text-sm" />
             </ProductCardContent>
           </ProductCard>
         ),

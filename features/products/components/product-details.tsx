@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 import type { BoutiqueProduct } from "./boutique-product-grid";
 import { ProductCardPrice } from "./product-card";
-import { ProductCardWishlist } from "./product-card-wishlist";
+import { AddToCartButton } from "./add-to-cart-button";
 
 export function ProductDetails({
   product,
@@ -30,13 +30,8 @@ export function ProductDetails({
       <div>
         <p className="mb-2 text-text-secondary">{product.category}</p>
         <h1>{product.title}</h1>
-        <div className="mt-4 flex items-center gap-4">
-          <ProductCardPrice unit={product.priceUnit}>{product.price}</ProductCardPrice>
-          <ProductCardWishlist
-            productId={product.id}
-            aria-label={`Wishlist: ${product.title}`}
-          />
-        </div>
+        <ProductCardPrice unit={product.priceUnit} className="mt-4">{product.price}</ProductCardPrice>
+        <AddToCartButton productId={product.id} title={product.title} unit={product.priceUnit} className="mt-5 px-5" />
       </div>
     </main>
   );

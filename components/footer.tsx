@@ -5,7 +5,7 @@ const quickLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
-  { label: "My Wishlist", href: "/wishlist" },
+  { label: "Cart", href: "/cart" },
 ];
 
 const shopLinks = [

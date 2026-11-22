@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, ShoppingBag } from "lucide-react";
-import { useWishlistCount } from "@/features/products/wishlist";
+import { ShoppingBag } from "lucide-react";
+import { useCartCount } from "@/features/products/cart";
 import { NavbarLinkGroup } from "./navbar-link-group";
 
 const actionClassName =
@@ -24,7 +24,7 @@ function CountBadge({ count }: { count: number }) {
 
 export function NavbarActions() {
   const pathname = usePathname();
-  const likeCount = useWishlistCount();
+  const cartCount = useCartCount();
   return (
     <NavbarLinkGroup
       pathname={pathname}
@@ -32,21 +32,13 @@ export function NavbarActions() {
       className="flex items-center justify-end lg:gap-3"
     >
       <Link
-        href="/wishlist"
-        aria-label={likeCount > 0 ? `Wishlist, ${likeCount} saved` : "Wishlist"}
-        aria-current={pathname === "/wishlist" ? "page" : undefined}
-        className={actionClassName}
-      >
-        <Heart aria-hidden="true" className="size-6" />
-        <CountBadge count={likeCount} />
-      </Link>
-      <Link
         href="/cart"
-        aria-label="Cart"
+        aria-label={cartCount > 0 ? `Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Cart"}
         aria-current={pathname === "/cart" ? "page" : undefined}
         className={actionClassName}
       >
         <ShoppingBag aria-hidden="true" className="size-6" />
+        <CountBadge count={cartCount} />
       </Link>
     </NavbarLinkGroup>
   );

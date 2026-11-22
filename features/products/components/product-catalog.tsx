@@ -11,7 +11,7 @@ import {
   ProductCardPrice,
   ProductCardTitle,
 } from "./product-card";
-import { ProductCardWishlist } from "./product-card-wishlist";
+import { AddToCartButton } from "./add-to-cart-button";
 
 interface ProductCatalogProps {
   title: string;
@@ -36,16 +36,11 @@ export function ProductCatalog({ title, typeLabel, products }: ProductCatalogPro
           {product.badge ? (
             <ProductCardBadge
               variant={product.badge.variant}
-              className="inset-s-2 top-2 max-w-[calc(100%-3.5rem)] px-2 py-1 text-[0.625rem] sm:text-xs"
+              className="inset-s-2 top-2 max-w-[calc(100%-1rem)] px-2 py-1 text-[0.625rem] sm:text-xs"
             >
               {product.badge.label}
             </ProductCardBadge>
           ) : null}
-          <ProductCardWishlist
-            productId={product.id}
-            aria-label={`Wishlist: ${product.title}`}
-            className="absolute end-1.5 top-1.5 me-0 bg-espresso/65 text-white hover:bg-espresso hover:text-white aria-pressed:bg-primary aria-pressed:text-primary-foreground"
-          />
         </ProductCardMedia>
         <ProductCardContent className="gap-1.5 p-3">
           <ProductCardTitle className="text-sm leading-snug lg:text-base">
@@ -62,6 +57,7 @@ export function ProductCatalog({ title, typeLabel, products }: ProductCatalogPro
           >
             View Product
           </ArrowLink>
+          <AddToCartButton productId={product.id} title={product.title} unit={product.priceUnit} className="w-full" />
         </ProductCardContent>
       </ProductCard>
     ),
