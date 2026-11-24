@@ -16,7 +16,7 @@ export function NavbarLink({
     <Link
       {...props}
       className={cn(
-        "flex min-h-11 text-[1.1rem] items-center whitespace-nowrap hover:text-link aria-[current=page]:text-link aria-[current=location]:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring motion-safe:transition-colors",
+        "flex min-h-11 text-[1rem] items-center whitespace-nowrap hover:text-link aria-[current=page]:text-link aria-[current=location]:text-link focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring motion-safe:transition-colors",
         className,
       )}
     >

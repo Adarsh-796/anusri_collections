@@ -16,9 +16,9 @@ import {
 import { getNavbarLinkCurrent } from "./navbar-link";
 
 const iconButton =
-  "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-sm text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-ring";
+  "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-ring";
 const linkStyle =
-  "flex min-h-11 items-center rounded-sm px-3 aria-[current]:bg-link aria-[current]:font-semibold aria-[current]:text-background focus-visible:outline-2 focus-visible:outline-ring";
+  "flex min-h-11 items-center px-3 aria-[current]:bg-link aria-[current]:font-semibold aria-[current]:text-background focus-visible:outline-2 focus-visible:outline-ring";
 
 export function NavbarDrawer() {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export function NavbarDrawer() {
       >
         <Menu aria-hidden="true" className="size-6" />
       </DrawerTrigger>
-      <DrawerContent className="bg-background font-body motion-reduce:transition-none">
+      <DrawerContent className="bg-background font-body data-[swipe-direction=right]:rounded-none motion-reduce:transition-none">
         <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-border p-4">
           <DrawerTitle className="text-xl">Menu</DrawerTitle>
           <DrawerClose
