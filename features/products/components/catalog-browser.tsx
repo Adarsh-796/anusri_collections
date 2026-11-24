@@ -1,67 +1,53 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
+import { useOptimistic, useRef, useTransition, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 import type { CatalogFilterGroup } from "../catalog-filters";
+import { catalogPageSize, matchingProductIds, type CatalogQuery } from "../catalog-query";
 import { CatalogFilterDrawer, CatalogFilterSidebar, ClearFilters } from "./catalog-filter-controls";
-
-interface CatalogItem {
-  id: string;
-  price: number;
-  tile: ReactNode;
-}
 
 interface CatalogBrowserProps {
   title: string;
   groups: readonly CatalogFilterGroup[];
-  items: readonly CatalogItem[];
+  query: CatalogQuery;
+  total: number;
+  collectionSize: number;
+  children: ReactNode;
 }
 
-const pageSize = 12;
-
-const priceSorters = {
-  "price-asc": (a: CatalogItem, b: CatalogItem) => a.price - b.price,
-  "price-desc": (a: CatalogItem, b: CatalogItem) => b.price - a.price,
-};
-
-function filterItems(
-  items: readonly CatalogItem[],
-  groups: readonly CatalogFilterGroup[],
-  selected: readonly string[],
-) {
-  if (selected.length === 0) return items;
-
-  const selectedOptions = new Set(selected);
-  const activeGroups = groups
-    .map(({ options }) => options.filter(({ id }) => selectedOptions.has(id)))
-    .filter((options) => options.length > 0)
-    .map((options) => new Set(options.flatMap(({ productIds }) => productIds)));
-
-  return items.filter(({ id }) => activeGroups.every((matches) => matches.has(id)));
-}
-
-export function CatalogBrowser({ title, groups, items }: CatalogBrowserProps) {
-  const [selected, setSelected] = useState<readonly string[]>([]);
-  const [sort, setSort] = useState<"newest" | keyof typeof priceSorters>("newest");
-  const [page, setPage] = useState(1);
+export function CatalogBrowser({ title, groups, query, total, collectionSize, children }: CatalogBrowserProps) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [controls, setControls] = useOptimistic(query);
+  const { selected, sort, page } = controls;
   const resultsRef = useRef<HTMLDivElement>(null);
+  const offset = (query.page - 1) * catalogPageSize;
+  const pageCount = Math.ceil(total / catalogPageSize);
 
-  const filtered = filterItems(items, groups, selected);
-  const sorted = sort === "newest" ? filtered : filtered.toSorted(priceSorters[sort]);
-  const offset = (page - 1) * pageSize;
-  const visible = sorted.slice(offset, offset + pageSize);
-  const pageCount = Math.ceil(sorted.length / pageSize);
+  function navigate(next: CatalogQuery) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("filter");
+    for (const id of next.selected) url.searchParams.append("filter", id);
+    if (next.sort === "newest") url.searchParams.delete("sort");
+    else url.searchParams.set("sort", next.sort);
+    if (next.page === 1) url.searchParams.delete("page");
+    else url.searchParams.set("page", String(next.page));
+    startTransition(() => {
+      setControls(next);
+      router.push(url.pathname + url.search + url.hash, { scroll: false });
+    });
+  }
 
   function applyFilters(filters: readonly string[]) {
-    setSelected(filters);
-    setPage(1);
+    navigate({ ...controls, selected: filters, page: 1 });
   }
 
   function goToPage(nextPage: number) {
-    setPage(nextPage);
+    navigate({ ...controls, page: nextPage });
     resultsRef.current?.scrollIntoView({ block: "start" });
   }
 
@@ -69,7 +55,7 @@ export function CatalogBrowser({ title, groups, items }: CatalogBrowserProps) {
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
       <CatalogFilterSidebar groups={groups} selected={selected} onApply={applyFilters} />
 
-      <section aria-label={`${title} results`} className="min-w-0">
+      <section aria-label={`${title} results`} aria-busy={pending} className="min-w-0">
         <h2 className="sr-only">Products</h2>
         <div
           ref={resultsRef}
@@ -79,12 +65,12 @@ export function CatalogBrowser({ title, groups, items }: CatalogBrowserProps) {
             groups={groups}
             selected={selected}
             onApply={applyFilters}
-            getResultCount={(filters) => filterItems(items, groups, filters).length}
+            getResultCount={(filters) => matchingProductIds(groups, filters)?.size ?? collectionSize}
           />
 
           <p role="status" className="order-last w-full text-sm leading-snug font-semibold tabular-nums sm:order-0 sm:w-auto">
-            {sorted.length
-              ? `Showing ${offset + 1}–${offset + visible.length} of ${sorted.length} ${title.toLowerCase()}`
+            {total
+              ? `Showing ${offset + 1}–${Math.min(offset + catalogPageSize, total)} of ${total} ${title.toLowerCase()}`
               : `No matching ${title.toLowerCase()}`}
           </p>
           <label className="ms-auto flex min-w-0 items-center gap-1 text-sm text-text-secondary">
@@ -94,8 +80,7 @@ export function CatalogBrowser({ title, groups, items }: CatalogBrowserProps) {
               onChange={(event) => {
                 const value = event.target.value;
                 if (value === "newest" || value === "price-asc" || value === "price-desc") {
-                  setSort(value);
-                  setPage(1);
+                  navigate({ ...controls, sort: value, page: 1 });
                 }
               }}
               className="min-h-10 min-w-0 rounded-button bg-transparent px-1 text-xs font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-ring sm:px-2 sm:text-sm"
@@ -107,11 +92,9 @@ export function CatalogBrowser({ title, groups, items }: CatalogBrowserProps) {
           </label>
         </div>
 
-        {visible.length > 0 ? (
+        {total > 0 ? (
           <ul className="grid grid-cols-1 items-stretch gap-3 min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
-            {visible.map(({ id, tile }) => (
-              <li key={id} className="min-w-0">{tile}</li>
-            ))}
+            {children}
           </ul>
         ) : (
           <div className="rounded-lg border border-border bg-surface px-5 py-10 text-center">

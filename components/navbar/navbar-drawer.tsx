@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { navbarItems } from "@/lib/consts";
 import {
@@ -23,6 +23,18 @@ const linkStyle =
 export function NavbarDrawer() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const desktop = window.matchMedia("(min-width: 1200px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    closeOnDesktop();
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, [open]);
 
   return (
     <Drawer swipeDirection="right" open={open} onOpenChange={setOpen}>

@@ -10,9 +10,8 @@ export function HeroComponent() {
         src="/anya-boutique.png"
         alt=""
         fill
-        priority
-        sizes="100vw"
-        loading="eager"
+        preload
+        sizes="min(100vw, 1400px)"
         className="object-cover object-[20%_center] md:object-left"
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
