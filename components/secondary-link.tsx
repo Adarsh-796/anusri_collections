@@ -15,7 +15,7 @@ export function SecondaryLink({
       data-slot="button"
       className={cn(
         buttonVariants({ variant: "secondary" }),
-        "rounded-none text-button-secondary-foreground border-button-secondary-foreground/70",
+        "rounded-none text-button-secondary-foreground px-6 py-5 min-h-11 border-burgundy",
         className,
       )}
     >

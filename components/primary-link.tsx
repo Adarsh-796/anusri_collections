@@ -15,7 +15,7 @@ export function PrimaryLink({
       data-slot="button"
       className={cn(
         buttonVariants(),
-        "rounded-none hover:bg-primary-hover",
+        "rounded-none hover:bg-primary-hover px-6 py-5 min-h-11",
         className,
       )}
     >
