@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 
 import { ArrowLink } from "@/components/arrow-link";
 import { buildCatalogFilters, type CatalogProduct } from "../catalog-filters";
@@ -17,15 +18,23 @@ interface ProductCatalogProps {
   title: string;
   typeLabel: string;
   products: readonly CatalogProduct[];
+  children?: ReactNode;
 }
 
-export function ProductCatalog({ title, typeLabel, products }: ProductCatalogProps) {
+export function ProductCatalog({
+  title,
+  typeLabel,
+  products,
+  children,
+}: ProductCatalogProps) {
   const items = products.map((product) => ({
     id: product.id,
     price: product.price,
     tile: (
       <ProductCard className="border border-border/70 shadow-none">
-        <ProductCardMedia className={product.priceUnit ? "aspect-square" : "aspect-[6/7]"}>
+        <ProductCardMedia
+          className={product.priceUnit ? "aspect-square" : "aspect-6/7"}
+        >
           <Image
             src={product.image}
             alt={product.title}
@@ -46,7 +55,10 @@ export function ProductCatalog({ title, typeLabel, products }: ProductCatalogPro
           <ProductCardTitle className="text-sm leading-snug lg:text-base">
             {product.title}
           </ProductCardTitle>
-          <ProductCardPrice unit={product.priceUnit} className="mt-auto text-base">
+          <ProductCardPrice
+            unit={product.priceUnit}
+            className="mt-auto text-base"
+          >
             {product.price}
           </ProductCardPrice>
           <ArrowLink
@@ -57,7 +69,12 @@ export function ProductCatalog({ title, typeLabel, products }: ProductCatalogPro
           >
             View Product
           </ArrowLink>
-          <AddToCartButton productId={product.id} title={product.title} unit={product.priceUnit} className="w-full" />
+          <AddToCartButton
+            productId={product.id}
+            title={product.title}
+            unit={product.priceUnit}
+            className="w-full"
+          />
         </ProductCardContent>
       </ProductCard>
     ),
@@ -66,7 +83,12 @@ export function ProductCatalog({ title, typeLabel, products }: ProductCatalogPro
   return (
     <main className="w-full px-gutter pt-8 pb-section sm:pt-12">
       <h1 className="mb-5 text-link sm:mb-7">{title}</h1>
-      <CatalogBrowser title={title} groups={buildCatalogFilters(products, typeLabel)} items={items} />
+      <CatalogBrowser
+        title={title}
+        groups={buildCatalogFilters(products, typeLabel)}
+        items={items}
+      />
+      {children}
     </main>
   );
 }
