@@ -29,7 +29,7 @@ interface CollectionTitleProps {
 
 function CollectionTitle({ children }: CollectionTitleProps) {
   return (
-    <h3 className="font-heading text-[clamp(1.5rem,8.4cqw,2.25rem)] leading-tight font-semibold text-ivory">
+    <h3 className="font-heading text-2xl @xs:text-3xl @md:text-4xl leading-tight font-semibold text-ivory">
       {children}
     </h3>
   );
@@ -39,11 +39,9 @@ interface CollectionCardContentProps {
   children: ReactNode;
 }
 
-export function CollectionCardContent({
-  children,
-}: CollectionCardContentProps) {
+function CollectionCardContent({ children }: CollectionCardContentProps) {
   return (
-    <div className="flex min-w-0 flex-col items-start gap-[clamp(0.25rem,1.6cqw,0.5rem)] p-[clamp(1rem,6cqw,1.875rem)]">
+    <div className="flex min-w-0 flex-col items-start gap-1 p-4 @xs:gap-2 @xs:p-5 @md:p-7">
       {children}
     </div>
   );
@@ -52,14 +50,14 @@ export function CollectionCardContent({
 interface CollectionCardImageProps {
   image: ImageProps["src"];
   alt?: string;
-  sizes: string;
+  sizes?: string;
   objectPosition?: string;
 }
 
 function CollectionCardImage({
   image,
   alt = "",
-  sizes,
+  sizes = "auto",
   objectPosition = "center",
 }: CollectionCardImageProps) {
   return (
@@ -67,6 +65,7 @@ function CollectionCardImage({
       src={image}
       alt={alt}
       fill
+      loading="lazy"
       sizes={sizes}
       style={{ objectPosition }}
       className="-z-20 object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover/collection:scale-105"
@@ -83,7 +82,7 @@ function CollectionCardLink({ href, children }: CollectionCardLinkProps) {
   return (
     <Link
       href={href}
-      className="group/cta mt-1 inline-flex items-center gap-2 rounded-sm font-body text-[clamp(0.6875rem,3.4cqw,0.875rem)] leading-normal tracking-wide text-[#e6b578] uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
+      className="group/cta mt-1 inline-flex items-center gap-2 rounded-sm font-body text-xs @md:text-sm leading-normal tracking-wide text-[#e6b578] uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
     >
       {children}
       <ArrowRight
@@ -111,7 +110,7 @@ export function CollectionDescription({
   children,
 }: CollectionDescriptionProps) {
   return (
-    <p className="max-w-[42ch] font-body text-[clamp(0.875rem,4.2cqw,1.125rem)] leading-normal text-ivory/90">
+    <p className="max-w-sm font-body text-sm @xs:text-base @md:text-lg leading-normal text-ivory/90">
       {children}
     </p>
   );
@@ -123,7 +122,7 @@ interface CollectionEyebrowProps {
 
 export function CollectionEyebrow({ children }: CollectionEyebrowProps) {
   return (
-    <p className="font-body text-[clamp(0.6875rem,3.5cqw,0.875rem)] leading-normal tracking-[0.08em] text-[#ffd092] uppercase">
+    <p className="font-body text-xs @md:text-sm leading-normal tracking-wider text-[#ffd092] uppercase">
       {children}
     </p>
   );

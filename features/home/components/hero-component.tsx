@@ -3,7 +3,7 @@ import { SecondaryLink } from "@/components/secondary-link";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
-export function HeroComponent() {
+export default function HeroComponent() {
   return (
     <HeroComponentSection>
       <Image

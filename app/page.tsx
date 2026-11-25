@@ -1,7 +1,11 @@
-import { CollectionsSection } from "@/features/home/components/collections-section";
-import { HeroComponent } from "@/features/home/components/hero-component";
+import CollectionsComponent from "@/features/home/components/collections-component";
+import HeroComponent from "@/features/home/components/hero-component";
 import { ProductShowcase } from "@/features/products/components/product-showcase";
-import { boutiqueProducts, dressProducts, fabricProducts } from "@/features/products/products";
+import {
+  boutiqueProducts,
+  dressProducts,
+  fabricProducts,
+} from "@/features/products/products";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +18,7 @@ export default function Home() {
   return (
     <main>
       <HeroComponent />
-      <CollectionsSection />
+      <CollectionsComponent />
       <ProductShowcase
         id="heritage-sarees"
         eyebrow="Heritage Weaves"
