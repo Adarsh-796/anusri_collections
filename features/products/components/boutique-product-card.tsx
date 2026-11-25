@@ -78,14 +78,11 @@ export function BoutiqueProductCard({
         <ProductCardCategory className="text-[clamp(0.6875rem,4.1cqw,0.875rem)] leading-normal">
           {category}
         </ProductCardCategory>
-        <ProductCardTitle className="text-[clamp(0.8125rem,6cqw,1.25rem)] leading-snug">
+        <ProductCardTitle className="text-[1rem] leading-snug">
           {title}
         </ProductCardTitle>
         <ProductCardFooter className="pt-0">
-          <ProductCardPrice
-            className="text-[clamp(0.875rem,6.5cqw,1.5rem)]"
-            unit={priceUnit}
-          >
+          <ProductCardPrice className="text-[1rem]" unit={priceUnit}>
             {price}
           </ProductCardPrice>
           {isFabric ? (

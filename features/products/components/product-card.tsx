@@ -13,7 +13,7 @@ export function ProductCard({
     <article
       {...props}
       className={cn(
-        "group/product flex h-full flex-col overflow-hidden rounded-lg bg-surface font-body text-card-foreground shadow-product",
+        "group/product flex h-full flex-col overflow-hidden bg-surface font-body text-card-foreground shadow-product",
         className,
       )}
     />
