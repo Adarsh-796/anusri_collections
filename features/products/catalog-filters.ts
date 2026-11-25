@@ -92,14 +92,14 @@ export function buildCatalogFilters(
   const ranges = soldByMeter ? fabricPrices : apparelPrices;
   const type = groupOptions("style", typeLabel, products, (product) => [product.style ?? product.category]);
   const color = groupOptions("color", "Color", products, (product) => [product.color]);
-  const groups = collection === "sarees"
-    ? [type, color]
-    : [
+  const groups = collection === "fabrics"
+    ? [
         type,
         groupOptions("material", "Fabric", products, (product) => [product.material]),
         color,
         groupOptions("occasion", "Occasion", products, (product) => product.occasions ?? []),
-      ];
+      ]
+    : [type, color];
 
   return [
     ...groups,
