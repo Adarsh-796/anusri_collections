@@ -14,7 +14,7 @@ function CollectionCardRoot({ children, className }: CollectionCardProps) {
     <article
       data-slot="collection-card"
       className={cn(
-        "group/collection @container relative isolate flex aspect-square min-w-0 flex-col justify-end overflow-hidden rounded-lg bg-espresso text-ivory sm:aspect-4/5 lg:aspect-3/4",
+        "group/collection @container relative isolate flex aspect-square min-w-0 flex-col justify-end overflow-hidden bg-espresso text-ivory sm:aspect-4/5 lg:aspect-3/4",
         className,
       )}
     >
