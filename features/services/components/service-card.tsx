@@ -9,7 +9,8 @@ export function ServiceGrid({ className, ...props }: ComponentProps<"div">) {
     <div
       {...props}
       className={cn(
-        "grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3",
+        "grid grid-cols-1 gap-7 sm:grid-cols-4 lg:grid-cols-3",
+        "sm:max-lg:*:col-span-2 sm:max-lg:[&>:last-child:nth-child(odd)]:col-start-2",
         className,
       )}
     />

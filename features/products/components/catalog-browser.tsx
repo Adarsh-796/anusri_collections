@@ -55,7 +55,7 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
       <CatalogFilterSidebar groups={groups} selected={selected} onApply={applyFilters} />
 
-      <section aria-label={`${title} results`} aria-busy={pending} className="min-w-0">
+      <section aria-label={`${title} results`} aria-busy={pending} className="@container/results min-w-0">
         <h2 className="sr-only">Products</h2>
         <div
           ref={resultsRef}
@@ -93,7 +93,7 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
         </div>
 
         {total > 0 ? (
-          <ul className="grid grid-cols-1 items-stretch gap-3 min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+          <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
             {children}
           </ul>
         ) : (
