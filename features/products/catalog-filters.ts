@@ -1,4 +1,5 @@
 import type { BoutiqueProduct } from "./components/boutique-product-grid";
+import type { ProductCollection } from "./get-catalog-products";
 
 const colors = {
   Burgundy: "#701b34",
@@ -84,16 +85,24 @@ function groupOptions(
 
 export function buildCatalogFilters(
   products: readonly CatalogProduct[],
+  collection: ProductCollection,
   typeLabel: string,
 ) {
   const soldByMeter = products.length > 0 && products.every((product) => product.priceUnit === "meter");
   const ranges = soldByMeter ? fabricPrices : apparelPrices;
+  const type = groupOptions("style", typeLabel, products, (product) => [product.style ?? product.category]);
+  const color = groupOptions("color", "Color", products, (product) => [product.color]);
+  const groups = collection === "sarees"
+    ? [type, color]
+    : [
+        type,
+        groupOptions("material", "Fabric", products, (product) => [product.material]),
+        color,
+        groupOptions("occasion", "Occasion", products, (product) => product.occasions ?? []),
+      ];
 
   return [
-    groupOptions("style", typeLabel, products, (product) => [product.style ?? product.category]),
-    groupOptions("material", "Fabric", products, (product) => [product.material]),
-    groupOptions("color", "Color", products, (product) => [product.color]),
-    groupOptions("occasion", "Occasion", products, (product) => product.occasions ?? []),
+    ...groups,
     {
       title: soldByMeter ? "Price per meter" : "Price",
       options: ranges.map((range, index) => ({

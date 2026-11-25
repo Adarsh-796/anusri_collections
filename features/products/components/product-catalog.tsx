@@ -75,7 +75,7 @@ async function CatalogResults({
     getCatalogProducts(collection),
     loadCatalogQuery(searchParams),
   ]);
-  const groups = buildCatalogFilters(products, typeLabel);
+  const groups = buildCatalogFilters(products, collection, typeLabel);
   const result = getCatalogPage(products, groups, params);
 
   return (

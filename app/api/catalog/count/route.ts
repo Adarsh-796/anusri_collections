@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   }
 
   const products = await getCatalogProducts(collection);
-  const groups = buildCatalogFilters(products, "Type");
+  const groups = buildCatalogFilters(products, collection, "Type");
   const matches = matchingProductIds(groups, params.getAll("filter"));
   return Response.json({ count: matches?.size ?? products.length });
 }
