@@ -95,7 +95,6 @@ export function buildCatalogFilters(
   const groups = collection === "fabrics"
     ? [
         type,
-        groupOptions("material", "Fabric", products, (product) => [product.material]),
         color,
         groupOptions("occasion", "Occasion", products, (product) => product.occasions ?? []),
       ]
