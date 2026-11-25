@@ -1,7 +1,7 @@
 import { Suspense, type ReactNode } from "react";
 
 import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
-import { buildCatalogFilters } from "../catalog-filters";
+import { buildCatalogFilters, summarizeCatalogFilters } from "../catalog-filters";
 import {
   getCatalogProducts,
   type ProductCollection,
@@ -14,30 +14,24 @@ import {
   type CatalogParams,
 } from "../catalog-query";
 
-interface ProductCatalogProps {
+interface CatalogResultsProps {
   title: string;
   typeLabel: string;
   collection: ProductCollection;
   searchParams: Promise<CatalogParams>;
-  children?: ReactNode;
 }
 
-function ProductCatalogRoot({ children, ...props }: ProductCatalogProps) {
+function ProductCatalogRoot({ children }: { children: ReactNode }) {
   return (
     <main className="w-full px-gutter pt-8 pb-section sm:pt-12">
-      <Suspense
-        fallback={<CatalogResultsSkeleton collection={props.collection} />}
-      >
-        <CatalogResults {...props} />
-      </Suspense>
       {children}
     </main>
   );
 }
 
-function CatalogResultsSkeleton({
+export function CatalogResultsSkeleton({
   collection,
-}: Pick<ProductCatalogProps, "collection">) {
+}: Pick<CatalogResultsProps, "collection">) {
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
       <span className="sr-only" role="status">
@@ -62,12 +56,20 @@ function CatalogResultsSkeleton({
   );
 }
 
+function ProductCatalogResult(props: CatalogResultsProps) {
+  return (
+    <Suspense fallback={<CatalogResultsSkeleton collection={props.collection} />}>
+      <CatalogResults {...props} />
+    </Suspense>
+  );
+}
+
 async function CatalogResults({
   title,
   typeLabel,
   collection,
   searchParams,
-}: Omit<ProductCatalogProps, "children">) {
+}: CatalogResultsProps) {
   const [products, params] = await Promise.all([
     getCatalogProducts(collection),
     searchParams,
@@ -78,7 +80,8 @@ async function CatalogResults({
   return (
     <CatalogBrowser
       title={title}
-      groups={groups}
+      collection={collection}
+      groups={summarizeCatalogFilters(groups)}
       query={result.query}
       total={result.total}
       collectionSize={products.length}
@@ -105,4 +108,5 @@ function ProductCatalogTitle({ children }: { children: ReactNode }) {
 export const ProductCatalog = {
   Root: ProductCatalogRoot,
   Title: ProductCatalogTitle,
+  Result: ProductCatalogResult,
 };

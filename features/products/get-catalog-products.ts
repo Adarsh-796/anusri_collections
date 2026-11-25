@@ -11,6 +11,10 @@ const localCatalogs = {
 
 export type ProductCollection = keyof typeof localCatalogs;
 
+export function isProductCollection(value: string | null): value is ProductCollection {
+  return value !== null && Object.hasOwn(localCatalogs, value);
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }

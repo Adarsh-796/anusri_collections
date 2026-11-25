@@ -3,13 +3,14 @@ import { ProductCatalog } from "@/features/products/components/product-catalog";
 
 export default function DressesPage({ searchParams }: PageProps<"/dresses">) {
   return (
-    <ProductCatalog.Root
-      title="Dresses"
-      typeLabel="Dress Type"
-      collection="dresses"
-      searchParams={searchParams}
-    >
+    <ProductCatalog.Root>
       <ProductCatalog.Title>Dresses</ProductCatalog.Title>
+      <ProductCatalog.Result
+        title="Dresses"
+        typeLabel="Dress Type"
+        collection="dresses"
+        searchParams={searchParams}
+      />
       <RelatedCollections current="dresses" />
     </ProductCatalog.Root>
   );

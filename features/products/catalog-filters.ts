@@ -32,6 +32,17 @@ export interface CatalogFilterGroup {
   }>;
 }
 
+export function summarizeCatalogFilters(groups: readonly CatalogFilterGroup[]) {
+  return groups.map(({ title, options }) => ({
+    title,
+    options: options.map(({ id, label, swatch, productIds }) => ({
+      id, label, swatch, count: productIds.length,
+    })),
+  }));
+}
+
+export type CatalogFilterSummary = ReturnType<typeof summarizeCatalogFilters>[number];
+
 const apparelPrices = [
   { label: "Under ₹5,000", max: 5000 },
   { label: "₹5,000 to under ₹10,000", min: 5000, max: 10000 },

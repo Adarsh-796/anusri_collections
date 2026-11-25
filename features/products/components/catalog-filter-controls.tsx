@@ -10,11 +10,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import type { CatalogFilterGroup } from "../catalog-filters";
+import type { CatalogFilterSummary } from "../catalog-filters";
+import type { ProductCollection } from "../get-catalog-products";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
 interface CatalogFilterControlsProps {
-  groups: readonly CatalogFilterGroup[];
+  groups: readonly CatalogFilterSummary[];
   selected: readonly string[];
   onApply: (filters: readonly string[]) => void;
 }
@@ -58,14 +59,46 @@ export function CatalogFilterSidebar({ groups, selected, onApply }: CatalogFilte
 }
 
 interface CatalogFilterDrawerProps extends CatalogFilterControlsProps {
-  getResultCount: (filters: readonly string[]) => number;
+  collection: ProductCollection;
+  collectionSize: number;
+  appliedFilters: readonly string[];
+  appliedCount: number;
+}
+
+function DraftResultCount({ query }: { query: string }) {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadCount() {
+      try {
+        const response = await fetch(`/api/catalog/count?${query}`, { signal: controller.signal });
+        if (response.ok) {
+          const { count } = await response.json();
+          if (!controller.signal.aborted && typeof count === "number") setCount(count);
+        }
+      } catch {
+        // Applying the filters still works when the optional preview is unavailable.
+      }
+    }
+    const timer = window.setTimeout(loadCount, 200);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query]);
+
+  return count === null ? null : ` (${count})`;
 }
 
 export function CatalogFilterDrawer({
   groups,
   selected,
   onApply,
-  getResultCount,
+  collection,
+  collectionSize,
+  appliedFilters,
+  appliedCount,
 }: CatalogFilterDrawerProps) {
   const [draft, setDraft] = useState<readonly string[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -80,6 +113,23 @@ export function CatalogFilterDrawer({
     desktop.addEventListener("change", closeOnDesktop);
     return () => desktop.removeEventListener("change", closeOnDesktop);
   }, [drawerOpen]);
+
+  let count: number | undefined;
+  if (!draft.length) count = collectionSize;
+  else if (draft.length === appliedFilters.length && draft.every((id) => appliedFilters.includes(id))) {
+    count = appliedCount;
+  } else if (draft.length === 1) {
+    for (const group of groups) {
+      const option = group.options.find(({ id }) => id === draft[0]);
+      if (option) {
+        count = option.count;
+        break;
+      }
+    }
+  }
+  const params = new URLSearchParams({ collection });
+  for (const id of draft) params.append("filter", id);
+  const query = params.toString();
 
   return (
     <Drawer
@@ -129,7 +179,9 @@ export function CatalogFilterDrawer({
               setDrawerOpen(false);
             }}
           >
-            View Results ({getResultCount(draft)})
+            View Results{count !== undefined ? ` (${count})` : drawerOpen && (
+              <DraftResultCount key={query} query={query} />
+            )}
           </Button>
         </div>
       </DrawerContent>

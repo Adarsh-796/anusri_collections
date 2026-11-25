@@ -1,8 +1,8 @@
 import { Check, ChevronDown } from "lucide-react";
-import type { CatalogFilterGroup } from "../catalog-filters";
+import type { CatalogFilterSummary } from "../catalog-filters";
 
 interface CatalogFilterFieldsProps {
-  groups: readonly CatalogFilterGroup[];
+  groups: readonly CatalogFilterSummary[];
   selected: readonly string[];
   onToggle: (id: string) => void;
 }
@@ -17,14 +17,14 @@ export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilte
             <ChevronDown aria-hidden="true" className="size-4 shrink-0 group-open:rotate-180" />
           </summary>
           <div role="group" aria-label={title} className="flex flex-wrap pb-2">
-            {options.map(({ id, label, productIds, swatch }) => {
+            {options.map(({ id, label, count, swatch }) => {
               const checked = selected.includes(id);
 
               return swatch ? (
                 <button
                   key={id}
                   type="button"
-                  aria-label={`${label} (${productIds.length})`}
+                  aria-label={`${label} (${count})`}
                   aria-pressed={checked}
                   title={label}
                   onClick={() => onToggle(id)}
@@ -47,7 +47,7 @@ export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilte
                     className="size-4 shrink-0 accent-burgundy"
                   />
                   <span>
-                    {label} <span className="text-text-secondary">({productIds.length})</span>
+                    {label} <span className="text-text-secondary">({count})</span>
                   </span>
                 </label>
               );

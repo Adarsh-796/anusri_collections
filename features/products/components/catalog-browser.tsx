@@ -5,21 +5,42 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
-import type { CatalogFilterGroup } from "../catalog-filters";
-import { catalogPageSize, matchingProductIds, type CatalogQuery } from "../catalog-query";
-import { CatalogFilterDrawer, CatalogFilterSidebar, ClearFilters } from "./catalog-filter-controls";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@/components/ui/pagination";
+import type { CatalogFilterSummary } from "../catalog-filters";
+import type { ProductCollection } from "../get-catalog-products";
+import {
+  catalogPageSize,
+  type CatalogQuery,
+} from "../catalog-query";
+import {
+  CatalogFilterDrawer,
+  CatalogFilterSidebar,
+  ClearFilters,
+} from "./catalog-filter-controls";
 
 interface CatalogBrowserProps {
   title: string;
-  groups: readonly CatalogFilterGroup[];
+  collection: ProductCollection;
+  groups: readonly CatalogFilterSummary[];
   query: CatalogQuery;
   total: number;
   collectionSize: number;
   children: ReactNode;
 }
 
-export function CatalogBrowser({ title, groups, query, total, collectionSize, children }: CatalogBrowserProps) {
+export function CatalogBrowser({
+  title,
+  collection,
+  groups,
+  query,
+  total,
+  collectionSize,
+  children,
+}: CatalogBrowserProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [controls, setControls] = useOptimistic(query);
@@ -53,9 +74,17 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
 
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
-      <CatalogFilterSidebar groups={groups} selected={selected} onApply={applyFilters} />
+      <CatalogFilterSidebar
+        groups={groups}
+        selected={selected}
+        onApply={applyFilters}
+      />
 
-      <section aria-label={`${title} results`} aria-busy={pending} className="@container/results min-w-0">
+      <section
+        aria-label={`${title} results`}
+        aria-busy={pending}
+        className="@container/results min-w-0"
+      >
         <h2 className="sr-only">Products</h2>
         <div
           ref={resultsRef}
@@ -65,10 +94,16 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
             groups={groups}
             selected={selected}
             onApply={applyFilters}
-            getResultCount={(filters) => matchingProductIds(groups, filters)?.size ?? collectionSize}
+            collection={collection}
+            collectionSize={collectionSize}
+            appliedFilters={query.selected}
+            appliedCount={total}
           />
 
-          <p role="status" className="order-last w-full text-sm leading-snug font-semibold tabular-nums sm:order-0 sm:w-auto">
+          <p
+            role="status"
+            className="order-last w-full text-sm leading-snug font-semibold tabular-nums sm:order-0 sm:w-auto"
+          >
             {total
               ? `Showing ${offset + 1}–${Math.min(offset + catalogPageSize, total)} of ${total} ${title.toLowerCase()}`
               : `No matching ${title.toLowerCase()}`}
@@ -79,7 +114,11 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
               value={sort}
               onChange={(event) => {
                 const value = event.target.value;
-                if (value === "newest" || value === "price-asc" || value === "price-desc") {
+                if (
+                  value === "newest" ||
+                  value === "price-asc" ||
+                  value === "price-desc"
+                ) {
                   navigate({ ...controls, sort: value, page: 1 });
                 }
               }}
@@ -98,8 +137,13 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
           </ul>
         ) : (
           <div className="rounded-lg border border-border bg-surface px-5 py-10 text-center">
-            <p className="text-sm text-text-secondary">Try clearing your filters to see more products.</p>
-            <ClearFilters disabled={selected.length === 0} onClick={() => applyFilters([])} />
+            <p className="text-sm text-text-secondary">
+              Try clearing your filters to see more products.
+            </p>
+            <ClearFilters
+              disabled={selected.length === 0}
+              onClick={() => applyFilters([])}
+            />
           </div>
         )}
 
@@ -107,7 +151,14 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
           <Pagination aria-label="Catalog pages" className="mt-6">
             <PaginationContent className="flex-wrap justify-center gap-1">
               <PaginationItem>
-                <Button type="button" size="icon" variant="ghost" disabled={page === 1} aria-label="Previous page" onClick={() => goToPage(page - 1)}>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  disabled={page === 1}
+                  aria-label="Previous page"
+                  onClick={() => goToPage(page - 1)}
+                >
                   <ChevronLeft aria-hidden="true" />
                 </Button>
               </PaginationItem>
@@ -129,7 +180,14 @@ export function CatalogBrowser({ title, groups, query, total, collectionSize, ch
                 );
               })}
               <PaginationItem>
-                <Button type="button" size="icon" variant="ghost" disabled={page === pageCount} aria-label="Next page" onClick={() => goToPage(page + 1)}>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  disabled={page === pageCount}
+                  aria-label="Next page"
+                  onClick={() => goToPage(page + 1)}
+                >
                   <ChevronRight aria-hidden="true" />
                 </Button>
               </PaginationItem>
