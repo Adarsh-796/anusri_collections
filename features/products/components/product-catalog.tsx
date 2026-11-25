@@ -4,9 +4,16 @@ import { Suspense, type ReactNode } from "react";
 import { ArrowLink } from "@/components/arrow-link";
 import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
 import { buildCatalogFilters, type CatalogProduct } from "../catalog-filters";
-import { getCatalogProducts, type ProductCollection } from "../get-catalog-products";
+import {
+  getCatalogProducts,
+  type ProductCollection,
+} from "../get-catalog-products";
 import { CatalogBrowser } from "./catalog-browser";
-import { catalogPageSize, getCatalogPage, type CatalogParams } from "../catalog-query";
+import {
+  catalogPageSize,
+  getCatalogPage,
+  type CatalogParams,
+} from "../catalog-query";
 import {
   ProductCard,
   ProductCardBadge,
@@ -25,11 +32,12 @@ interface ProductCatalogProps {
   children?: ReactNode;
 }
 
-export function ProductCatalog({ children, ...props }: ProductCatalogProps) {
+function ProductCatalogRoot({ children, ...props }: ProductCatalogProps) {
   return (
     <main className="w-full px-gutter pt-8 pb-section sm:pt-12">
-      <h1 className="mb-5 text-link sm:mb-7">{props.title}</h1>
-      <Suspense fallback={<CatalogResultsSkeleton collection={props.collection} />}>
+      <Suspense
+        fallback={<CatalogResultsSkeleton collection={props.collection} />}
+      >
         <CatalogResults {...props} />
       </Suspense>
       {children}
@@ -37,18 +45,27 @@ export function ProductCatalog({ children, ...props }: ProductCatalogProps) {
   );
 }
 
-function CatalogResultsSkeleton({ collection }: Pick<ProductCatalogProps, "collection">) {
+function CatalogResultsSkeleton({
+  collection,
+}: Pick<ProductCatalogProps, "collection">) {
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
-      <span className="sr-only" role="status">Loading products…</span>
-      <div aria-hidden="true" className="hidden h-64 rounded-lg bg-muted lg:block" />
+      <span className="sr-only" role="status">
+        Loading products…
+      </span>
+      <div
+        aria-hidden="true"
+        className="hidden h-64 rounded-lg bg-muted lg:block"
+      />
       <div className="@container/results min-w-0">
         <div aria-hidden="true" className="mb-4 h-14 rounded-lg bg-muted" />
         <div className="grid grid-cols-1 gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
           {Array.from({ length: catalogPageSize }, (_, index) => (
             <ProductCardSkeleton
               key={index}
-              mediaClassName={collection === "fabrics" ? "aspect-square" : "aspect-6/7"}
+              mediaClassName={
+                collection === "fabrics" ? "aspect-square" : "aspect-6/7"
+              }
             />
           ))}
         </div>
@@ -114,7 +131,10 @@ async function CatalogResults({
   collection,
   searchParams,
 }: Omit<ProductCatalogProps, "children">) {
-  const [products, params] = await Promise.all([getCatalogProducts(collection), searchParams]);
+  const [products, params] = await Promise.all([
+    getCatalogProducts(collection),
+    searchParams,
+  ]);
   const groups = buildCatalogFilters(products, typeLabel);
   const result = getCatalogPage(products, groups, params);
 
@@ -134,3 +154,14 @@ async function CatalogResults({
     </CatalogBrowser>
   );
 }
+
+function ProductCatalogTitle({ children }: { children: ReactNode }) {
+  return (
+    <h1 className="mb-5 text-link sm:mb-7 text-4xl md:text-5xl">{children}</h1>
+  );
+}
+
+export const ProductCatalog = {
+  Root: ProductCatalogRoot,
+  Title: ProductCatalogTitle,
+};

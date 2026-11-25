@@ -3,8 +3,14 @@ import { ProductCatalog } from "@/features/products/components/product-catalog";
 
 export default function FabricsPage({ searchParams }: PageProps<"/fabrics">) {
   return (
-    <ProductCatalog title="Fabrics" typeLabel="Textile Type" collection="fabrics" searchParams={searchParams}>
+    <ProductCatalog.Root
+      title="Fabrics"
+      typeLabel="Textile Type"
+      collection="fabrics"
+      searchParams={searchParams}
+    >
+      <ProductCatalog.Title>Fabrics</ProductCatalog.Title>
       <RelatedCollections current="fabrics" />
-    </ProductCatalog>
+    </ProductCatalog.Root>
   );
 }

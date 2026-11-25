@@ -128,7 +128,7 @@ export function CollectionEyebrow({ children }: CollectionEyebrowProps) {
   );
 }
 
-export const CollectionCard = Object.assign(CollectionCardRoot, {
+export const CollectionCard = {
   Root: CollectionCardRoot,
   Image: CollectionCardImage,
   Overlay: CollectionCardOverlay,
@@ -137,4 +137,4 @@ export const CollectionCard = Object.assign(CollectionCardRoot, {
   Title: CollectionTitle,
   Description: CollectionDescription,
   Link: CollectionCardLink,
-});
+};
