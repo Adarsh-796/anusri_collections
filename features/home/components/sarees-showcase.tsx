@@ -10,7 +10,7 @@ export default function SareesShowcase() {
       title="Timeless Sarees, Endless Elegance."
       description="Explore our beautiful saree collections, thoughtfully selected for every celebration and special occasion."
       viewAll={{ href: "/sarees", label: "View All Sarees" }}
-      className="bg-[#fcf6f4]"
+      className="bg-background"
     >
       <BoutiqueProductGrid products={boutiqueProducts} />
     </ProductShowcase>
