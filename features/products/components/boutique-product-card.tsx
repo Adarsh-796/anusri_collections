@@ -49,15 +49,13 @@ export function BoutiqueProductCard({
 
   return (
     <ProductCard
-      className={cn("@container min-w-0", isFabric && "relative bg-[#fcf6f4] dark:bg-surface")}
+      className={cn(
+        "@container min-w-0",
+        isFabric && "relative bg-[#fcf6f4] dark:bg-surface",
+      )}
     >
       <ProductCardMedia className={isFabric ? "aspect-square" : undefined}>
-        <ProductCardImage
-          src={image}
-          alt={title}
-          loading="lazy"
-          sizes="auto"
-        />
+        <ProductCardImage src={image} alt={title} loading="lazy" sizes="auto" />
         {badge && (
           <ProductCardBadge
             variant={badge.variant}
@@ -98,7 +96,12 @@ export function BoutiqueProductCard({
             />
           ) : null}
         </ProductCardFooter>
-        <AddToCartButton productId={id} title={title} unit={priceUnit} className="relative z-10 w-full text-xs sm:text-sm" />
+        <AddToCartButton
+          productId={id}
+          title={title}
+          unit={priceUnit}
+          className="w-full text-xs sm:text-sm"
+        />
       </ProductCardContent>
     </ProductCard>
   );

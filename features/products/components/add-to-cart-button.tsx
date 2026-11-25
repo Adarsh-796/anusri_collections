@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
 import { changeCartQuantity, useCartQuantity } from "../cart";
 
 interface AddToCartButtonProps {
@@ -12,21 +11,31 @@ interface AddToCartButtonProps {
   className?: string;
 }
 
-export function AddToCartButton({ productId, title, unit, className }: AddToCartButtonProps) {
+export function AddToCartButton({
+  productId,
+  title,
+  unit,
+  className,
+}: AddToCartButtonProps) {
   const quantity = useCartQuantity(productId);
+  const inCart = quantity > 0;
+  const label = inCart ? "Remove item" : "Add to cart";
 
   return (
     <>
       <Button
         type="button"
-        aria-label={`Add to cart: ${title}`}
-        className={cn("min-h-11 cursor-pointer whitespace-normal", className)}
-        onClick={() => changeCartQuantity(productId, 1)}
+        aria-label={`${label}: ${title}`}
+        className={cn(
+          "min-h-11 rounded-none cursor-pointer whitespace-normal",
+          className,
+        )}
+        onClick={() => changeCartQuantity(productId, inCart ? "remove" : 1)}
       >
-        Add to cart
+        {label}
       </Button>
       <span role="status" className="sr-only">
-        {quantity > 0 ? `${quantity}${unit ? " m of" : " ×"} ${title} in cart.` : ""}
+        {inCart ? `${quantity}${unit ? " m of" : " ×"} ${title} in cart.` : ""}
       </span>
     </>
   );
