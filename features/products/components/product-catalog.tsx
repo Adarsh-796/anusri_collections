@@ -2,9 +2,11 @@ import Image from "next/image";
 import { Suspense, type ReactNode } from "react";
 
 import { ArrowLink } from "@/components/arrow-link";
+import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
 import { buildCatalogFilters, type CatalogProduct } from "../catalog-filters";
+import { getCatalogProducts, type ProductCollection } from "../get-catalog-products";
 import { CatalogBrowser } from "./catalog-browser";
-import { getCatalogPage, type CatalogParams } from "../catalog-query";
+import { catalogPageSize, getCatalogPage, type CatalogParams } from "../catalog-query";
 import {
   ProductCard,
   ProductCardBadge,
@@ -18,9 +20,41 @@ import { AddToCartButton } from "./add-to-cart-button";
 interface ProductCatalogProps {
   title: string;
   typeLabel: string;
-  products: readonly CatalogProduct[];
+  collection: ProductCollection;
   searchParams: Promise<CatalogParams>;
   children?: ReactNode;
+}
+
+export function ProductCatalog({ children, ...props }: ProductCatalogProps) {
+  return (
+    <main className="w-full px-gutter pt-8 pb-section sm:pt-12">
+      <h1 className="mb-5 text-link sm:mb-7">{props.title}</h1>
+      <Suspense fallback={<CatalogResultsSkeleton collection={props.collection} />}>
+        <CatalogResults {...props} />
+      </Suspense>
+      {children}
+    </main>
+  );
+}
+
+function CatalogResultsSkeleton({ collection }: Pick<ProductCatalogProps, "collection">) {
+  return (
+    <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
+      <span className="sr-only" role="status">Loading products…</span>
+      <div aria-hidden="true" className="hidden h-64 rounded-lg bg-muted lg:block" />
+      <div className="@container/results min-w-0">
+        <div aria-hidden="true" className="mb-4 h-14 rounded-lg bg-muted" />
+        <div className="grid grid-cols-1 gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
+          {Array.from({ length: catalogPageSize }, (_, index) => (
+            <ProductCardSkeleton
+              key={index}
+              mediaClassName={collection === "fabrics" ? "aspect-square" : "aspect-6/7"}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function CatalogTile({ product }: { product: CatalogProduct }) {
@@ -74,27 +108,29 @@ function CatalogTile({ product }: { product: CatalogProduct }) {
   );
 }
 
-async function CatalogResults({ title, typeLabel, products, searchParams }: Omit<ProductCatalogProps, "children">) {
+async function CatalogResults({
+  title,
+  typeLabel,
+  collection,
+  searchParams,
+}: Omit<ProductCatalogProps, "children">) {
+  const [products, params] = await Promise.all([getCatalogProducts(collection), searchParams]);
   const groups = buildCatalogFilters(products, typeLabel);
-  const result = getCatalogPage(products, groups, await searchParams);
+  const result = getCatalogPage(products, groups, params);
 
   return (
-    <CatalogBrowser title={title} groups={groups} query={result.query} total={result.total} collectionSize={products.length}>
+    <CatalogBrowser
+      title={title}
+      groups={groups}
+      query={result.query}
+      total={result.total}
+      collectionSize={products.length}
+    >
       {result.products.map((product) => (
-        <li key={product.id} className="min-w-0"><CatalogTile product={product} /></li>
+        <li key={product.id} className="min-w-0">
+          <CatalogTile product={product} />
+        </li>
       ))}
     </CatalogBrowser>
-  );
-}
-
-export function ProductCatalog({ children, ...props }: ProductCatalogProps) {
-  return (
-    <main className="w-full px-gutter pt-8 pb-section sm:pt-12">
-      <h1 className="mb-5 text-link sm:mb-7">{props.title}</h1>
-      <Suspense fallback={<p role="status">Loading products…</p>}>
-        <CatalogResults {...props} />
-      </Suspense>
-      {children}
-    </main>
   );
 }

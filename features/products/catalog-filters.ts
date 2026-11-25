@@ -10,6 +10,10 @@ const colors = {
   Plum: "#633447",
 };
 
+export function isCatalogColor(value: unknown): value is keyof typeof colors {
+  return typeof value === "string" && Object.hasOwn(colors, value);
+}
+
 export type CatalogProduct = Omit<BoutiqueProduct, "price"> & {
   price: number;
   style?: string;
