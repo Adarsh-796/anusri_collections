@@ -1,60 +1,111 @@
+// features/products/components/product-showcase.tsx
 import type { ComponentProps, ReactNode } from "react";
 import { ArrowLink } from "@/components/arrow-link";
-import { cn } from "@/lib/utils";
 import SectionEyebrow from "@/features/home/components/section-eyebrow";
+import { cn } from "@/lib/utils";
 
-interface ProductShowcaseProps {
-  id: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  viewAll: {
-    href: ComponentProps<typeof ArrowLink>["href"];
-    label: string;
-  };
-  className?: string;
-  children: ReactNode;
-}
+const headingIdFor = (id: string) => `${id}-title`;
 
-export default function ProductShowcase({
+function Root({
   id,
-  eyebrow,
-  title,
-  description,
-  viewAll,
   className,
   children,
-}: ProductShowcaseProps) {
-  const headingId = `${id}-title`;
-  const { href, label } = viewAll;
-
+}: {
+  id: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <section
       id={id}
-      aria-labelledby={headingId}
+      aria-labelledby={headingIdFor(id)}
       className={cn("px-gutter py-9 sm:py-12", className)}
     >
-      <div className="mx-auto w-full max-w-md sm:max-w-none">
-        <header className="mb-stack flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div>
-            <SectionEyebrow>{eyebrow}</SectionEyebrow>
-            <h2 id={headingId} className="type-h2">
-              {title}
-            </h2>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-text-secondary">
-              {description}
-            </p>
-          </div>
-          <ArrowLink
-            href={href}
-            className="min-h-11 shrink-0 gap-2 text-sm sm:min-h-6"
-          >
-            {label}
-          </ArrowLink>
-        </header>
-
-        {children}
-      </div>
+      {children}
     </section>
   );
 }
+
+function Header({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className="mx-auto w-full max-w-md sm:max-w-none">
+      <header
+        className={cn(
+          "mb-stack flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6",
+          className,
+        )}
+      >
+        {children}
+      </header>
+    </div>
+  );
+}
+
+function Heading({ children }: { children: ReactNode }) {
+  return <div>{children}</div>;
+}
+
+function Eyebrow({ children }: { children: ReactNode }) {
+  return <SectionEyebrow>{children}</SectionEyebrow>;
+}
+
+function Title({
+  id,
+  children,
+  className,
+}: {
+  id: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <h2 id={headingIdFor(id)} className={cn("type-h2", className)}>
+      {children}
+    </h2>
+  );
+}
+
+function Description({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        "mt-2 max-w-lg text-sm leading-relaxed text-text-secondary",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+function ViewAll({ className, ...props }: ComponentProps<typeof ArrowLink>) {
+  return (
+    <ArrowLink
+      className={cn("min-h-11 shrink-0 gap-2 text-sm sm:min-h-6", className)}
+      {...props}
+    />
+  );
+}
+
+const ProductShowcase = Object.assign(Root, {
+  Header,
+  Heading,
+  Eyebrow,
+  Title,
+  Description,
+  ViewAll,
+});
+
+export default ProductShowcase;

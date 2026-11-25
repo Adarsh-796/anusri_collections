@@ -2,16 +2,27 @@ import { BoutiqueProductGrid } from "@/features/products/components/boutique-pro
 import ProductShowcase from "@/features/products/components/product-showcase";
 import { fabricProducts } from "@/features/products/products";
 
+const ID = "textile-atelier";
+
 export default function FabricsShowcase() {
   return (
-    <ProductShowcase
-      id="textile-atelier"
-      eyebrow="Textile Atelier"
-      title="The Beauty Begins With the Fabric."
-      description="Discover beautiful fabrics and materials that inspire unique styles and personalized creations."
-      viewAll={{ href: "/fabrics", label: "View All Fabrics" }}
-      className="bg-[#fcf9f4]"
-    >
+    <ProductShowcase id={ID} className="bg-[#fcf9f4]">
+      <ProductShowcase.Header>
+        <ProductShowcase.Heading>
+          <ProductShowcase.Eyebrow>Textile Atelier</ProductShowcase.Eyebrow>
+          <ProductShowcase.Title id={ID}>
+            The Beauty Begins With the Fabric.
+          </ProductShowcase.Title>
+          <ProductShowcase.Description>
+            Discover beautiful fabrics and materials that inspire unique styles
+            and personalized creations.
+          </ProductShowcase.Description>
+        </ProductShowcase.Heading>
+        <ProductShowcase.ViewAll href="/fabrics">
+          View All Fabrics
+        </ProductShowcase.ViewAll>
+      </ProductShowcase.Header>
+
       <BoutiqueProductGrid
         products={fabricProducts}
         cardVariant="fabric"
