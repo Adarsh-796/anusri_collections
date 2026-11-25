@@ -10,6 +10,7 @@ export default function FabricsShowcase() {
       description="Discover beautiful fabrics and materials that inspire unique styles and personalized creations."
       viewAll={{ href: "/fabrics", label: "View All Fabrics" }}
       products={fabricProducts}
+      cardVariant="fabric"
       className="bg-[#fcf9f4]"
     />
   );

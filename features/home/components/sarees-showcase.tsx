@@ -4,11 +4,11 @@ import { boutiqueProducts } from "@/features/products/products";
 export default function SareesShowcase() {
   return (
     <ProductShowcase
-      id="contemporary-dresses"
-      eyebrow="Contemporary Ethnic"
-      title="Designed to Make Every Moment Special."
-      description="Explore beautiful designs that bring together modern style and traditional elegance."
-      viewAll={{ href: "/dresses", label: "View All Dresses" }}
+      id="heritage-sarees"
+      eyebrow="Heritage Weaves"
+      title="Timeless Sarees, Endless Elegance."
+      description="Explore our beautiful saree collections, thoughtfully selected for every celebration and special occasion."
+      viewAll={{ href: "/sarees", label: "View All Sarees" }}
       products={boutiqueProducts}
       className="bg-[#fcf6f4]"
     />

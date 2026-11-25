@@ -1,110 +1,33 @@
 import type { ComponentProps } from "react";
 
-import {
-  ProductCard,
-  ProductCardAction,
-  ProductCardBadge,
-  ProductCardCategory,
-  ProductCardContent,
-  ProductCardFabricLink,
-  ProductCardFooter,
-  ProductCardImage,
-  ProductCardMedia,
-  ProductCardPrice,
-  ProductCardTitle,
-} from "./product-card";
-import { AddToCartButton } from "./add-to-cart-button";
+import { BoutiqueProductCard, type BoutiqueProduct, type BoutiqueCardVariant } from "./boutique-product-card";
 import { ProductGrid } from "./product-grid";
 
-export interface BoutiqueProduct {
-  id: string;
-  image: ComponentProps<typeof ProductCardImage>["src"];
-  title: string;
-  badge?: {
-    variant: NonNullable<ComponentProps<typeof ProductCardBadge>["variant"]>;
-    label: string;
-  } | null;
-  href: ComponentProps<typeof ProductCardAction>["href"];
-  category: string;
-  price: number | string;
-  priceUnit?: "meter";
-}
+export type { BoutiqueProduct } from "./boutique-product-card";
 
 interface BoutiqueProductGridProps {
   products: readonly BoutiqueProduct[];
   className?: string;
-  imageSizes: string;
-  firstImageLoading?: ComponentProps<typeof ProductCardImage>["loading"];
-  productLinkPrefetch?: ComponentProps<typeof ProductCardAction>["prefetch"];
+  cardVariant?: BoutiqueCardVariant;
+  productLinkPrefetch?: ComponentProps<typeof BoutiqueProductCard>["prefetch"];
 }
 
 export function BoutiqueProductGrid({
   products,
   className,
-  imageSizes,
-  firstImageLoading,
+  cardVariant,
   productLinkPrefetch,
 }: BoutiqueProductGridProps) {
   return (
     <ProductGrid className={className}>
-      {products.map(
-        ({ id, image, title, badge, href, category, price, priceUnit }, index) => (
-          <ProductCard
-            key={id}
-            className={priceUnit ? "@container relative min-w-0 bg-[#fcf6f4] dark:bg-surface" : "@container min-w-0"}
-          >
-            <ProductCardMedia className={priceUnit ? "aspect-square" : undefined}>
-              <ProductCardImage
-                src={image}
-                alt={title}
-                loading={index === 0 ? firstImageLoading : undefined}
-                sizes={imageSizes}
-              />
-              {badge && (
-                <ProductCardBadge
-                  variant={badge.variant}
-                  className="inset-s-[clamp(0.5rem,4.5cqw,1rem)] top-[clamp(0.5rem,4.5cqw,1rem)] max-w-[calc(100%-1rem)] px-[clamp(0.5rem,3.5cqw,0.75rem)] py-[clamp(0.25rem,1.75cqw,0.375rem)] text-[clamp(0.625rem,3.8cqw,0.875rem)]"
-                >
-                  {badge.label}
-                </ProductCardBadge>
-              )}
-              {priceUnit ? null : (
-                <ProductCardAction
-                  href={href}
-                  prefetch={productLinkPrefetch}
-                  aria-label={`View product: ${title}`}
-                >
-                  View Product
-                </ProductCardAction>
-              )}
-            </ProductCardMedia>
-            <ProductCardContent className="gap-[clamp(0.25rem,2cqw,0.5rem)] px-[clamp(0.75rem,5.5cqw,1.25rem)] pt-[clamp(0.75rem,6cqw,1.5rem)] pb-[clamp(0.25rem,3cqw,0.875rem)]">
-              <ProductCardCategory className="text-[clamp(0.6875rem,4.1cqw,0.875rem)] leading-normal">
-                {category}
-              </ProductCardCategory>
-              <ProductCardTitle className="text-[clamp(0.8125rem,6cqw,1.25rem)] leading-snug">
-                {title}
-              </ProductCardTitle>
-              <ProductCardFooter className="pt-0">
-                <ProductCardPrice
-                  className="text-[clamp(0.875rem,6.5cqw,1.5rem)]"
-                  unit={priceUnit}
-                >
-                  {price}
-                </ProductCardPrice>
-                {priceUnit ? (
-                  <ProductCardFabricLink
-                    href={href}
-                    prefetch={productLinkPrefetch}
-                    aria-label={`View fabric: ${title}`}
-                  />
-                ) : null}
-              </ProductCardFooter>
-              <AddToCartButton productId={id} title={title} unit={priceUnit} className="relative z-10 w-full text-xs sm:text-sm" />
-            </ProductCardContent>
-          </ProductCard>
-        ),
-      )}
+      {products.map((product) => (
+        <BoutiqueProductCard
+          key={product.id}
+          product={product}
+          variant={cardVariant}
+          prefetch={productLinkPrefetch}
+        />
+      ))}
     </ProductGrid>
   );
 }
