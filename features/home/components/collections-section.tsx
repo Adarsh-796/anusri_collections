@@ -1,11 +1,11 @@
-import { CollectionCard } from "./CollectionCard";
+import { CollectionCard } from "./collection-card";
 import { CollectionCardContent } from "./CollectionCardContent";
 import { CollectionCardImage } from "./CollectionCardImage";
 import { CollectionCardLink } from "./CollectionCardLink";
 import { CollectionCardOverlay } from "./CollectionCardOverlay";
 import { CollectionDescription } from "./CollectionDescription";
 import { CollectionEyebrow } from "./CollectionEyebrow";
-import { CollectionTitle } from "./CollectionTitle";
+import { CollectionTitle } from "./collection-title";
 
 const collections = [
   {
