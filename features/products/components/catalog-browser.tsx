@@ -1,7 +1,7 @@
 "use client";
 
-import { useOptimistic, useRef, useTransition, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRef, useTransition, type ReactNode } from "react";
+import { useQueryStates } from "nuqs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import type { CatalogFilterSummary } from "../catalog-filters";
 import type { ProductCollection } from "../get-catalog-products";
 import {
   catalogPageSize,
+  catalogParsers,
+  selectedCatalogFilters,
   type CatalogQuery,
 } from "../catalog-query";
 import {
@@ -41,34 +43,25 @@ export function CatalogBrowser({
   collectionSize,
   children,
 }: CatalogBrowserProps) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [controls, setControls] = useOptimistic(query);
-  const { selected, sort, page } = controls;
+  const [controls, setControls] = useQueryStates(catalogParsers, {
+    history: "push",
+    shallow: false,
+    scroll: false,
+    startTransition,
+  });
+  const selected = selectedCatalogFilters(groups, controls.filter);
   const resultsRef = useRef<HTMLDivElement>(null);
   const offset = (query.page - 1) * catalogPageSize;
   const pageCount = Math.ceil(total / catalogPageSize);
-
-  function navigate(next: CatalogQuery) {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("filter");
-    for (const id of next.selected) url.searchParams.append("filter", id);
-    if (next.sort === "newest") url.searchParams.delete("sort");
-    else url.searchParams.set("sort", next.sort);
-    if (next.page === 1) url.searchParams.delete("page");
-    else url.searchParams.set("page", String(next.page));
-    startTransition(() => {
-      setControls(next);
-      router.push(url.pathname + url.search + url.hash, { scroll: false });
-    });
-  }
+  const page = Math.max(1, Math.min(controls.page, pageCount));
 
   function applyFilters(filters: readonly string[]) {
-    navigate({ ...controls, selected: filters, page: 1 });
+    void setControls({ filter: [...filters], page: 1 });
   }
 
   function goToPage(nextPage: number) {
-    navigate({ ...controls, page: nextPage });
+    void setControls({ page: nextPage });
     resultsRef.current?.scrollIntoView({ block: "start" });
   }
 
@@ -96,7 +89,7 @@ export function CatalogBrowser({
             onApply={applyFilters}
             collection={collection}
             collectionSize={collectionSize}
-            appliedFilters={query.selected}
+            appliedFilters={query.filter}
             appliedCount={total}
           />
 
@@ -111,16 +104,11 @@ export function CatalogBrowser({
           <label className="ms-auto flex min-w-0 items-center gap-1 text-sm text-text-secondary">
             <span className="whitespace-nowrap">Sort by</span>
             <select
-              value={sort}
+              value={controls.sort}
               onChange={(event) => {
                 const value = event.target.value;
-                if (
-                  value === "newest" ||
-                  value === "price-asc" ||
-                  value === "price-desc"
-                ) {
-                  navigate({ ...controls, sort: value, page: 1 });
-                }
+                const sort = catalogParsers.sort.parse(value);
+                if (sort) void setControls({ sort, page: 1 });
               }}
               className="min-h-10 min-w-0 rounded-button bg-transparent px-1 text-xs font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-ring sm:px-2 sm:text-sm"
             >

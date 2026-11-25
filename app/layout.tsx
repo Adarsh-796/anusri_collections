@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar/navbar";
 import { Montserrat, Playfair_Display } from "next/font/google";
@@ -29,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Container>
           <Navbar />
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <Footer />
         </Container>
       </body>

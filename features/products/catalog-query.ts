@@ -1,11 +1,36 @@
+import {
+  createLoader,
+  createParser,
+  parseAsNativeArrayOf,
+  parseAsString,
+  parseAsStringLiteral,
+  type inferParserType,
+} from "nuqs/server";
 import type { CatalogFilterGroup, CatalogProduct } from "./catalog-filters";
 
 export const catalogPageSize = 12;
-export type CatalogParams = Record<string, string | string[] | undefined>;
-export interface CatalogQuery {
-  selected: readonly string[];
-  sort: "newest" | "price-asc" | "price-desc";
-  page: number;
+export const catalogParsers = {
+  filter: parseAsNativeArrayOf(parseAsString),
+  sort: parseAsStringLiteral(["newest", "price-asc", "price-desc"] as const).withDefault("newest"),
+  page: createParser({
+    parse(value) {
+      const page = Number(value);
+      return Number.isSafeInteger(page) && page > 0 ? page : null;
+    },
+    serialize: String,
+  }).withDefault(1),
+};
+export type CatalogQuery = inferParserType<typeof catalogParsers>;
+export const loadCatalogQuery = createLoader(catalogParsers);
+
+export function selectedCatalogFilters(
+  groups: readonly { options: readonly { id: string }[] }[],
+  filters: readonly string[],
+) {
+  const requested = new Set(filters);
+  return groups.flatMap(({ options }) =>
+    options.filter(({ id }) => requested.has(id)).map(({ id }) => id)
+  );
 }
 
 // Options within a group are alternatives. A product must match every active group.
@@ -24,20 +49,18 @@ export function matchingProductIds(groups: readonly CatalogFilterGroup[], select
   return matches;
 }
 
-export function getCatalogPage(products: readonly CatalogProduct[], groups: readonly CatalogFilterGroup[], params: CatalogParams) {
-  const requested = new Set(Array.isArray(params.filter) ? params.filter : [params.filter]);
-  const selected = groups.flatMap(({ options }) => options.map(({ id }) => id).filter((id) => requested.has(id)));
+export function getCatalogPage(products: readonly CatalogProduct[], groups: readonly CatalogFilterGroup[], params: CatalogQuery) {
+  const selected = selectedCatalogFilters(groups, params.filter);
   const matches = matchingProductIds(groups, selected);
   const filtered = matches ? products.filter(({ id }) => matches.has(id)) : products;
-  const sort = params.sort === "price-asc" || params.sort === "price-desc" ? params.sort : "newest";
+  const sort = params.sort;
   const sorted = sort === "newest" ? filtered : filtered.toSorted((a, b) =>
     sort === "price-asc" ? a.price - b.price : b.price - a.price
   );
   const pageCount = Math.ceil(sorted.length / catalogPageSize);
-  const requestedPage = typeof params.page === "string" ? Number(params.page) : 1;
-  const page = Math.max(1, Math.min(pageCount, Number.isSafeInteger(requestedPage) ? requestedPage : 1));
+  const page = Math.max(1, Math.min(pageCount, params.page));
   const offset = (page - 1) * catalogPageSize;
-  const query: CatalogQuery = { selected, sort, page };
+  const query: CatalogQuery = { filter: selected, sort, page };
 
   return { query, total: sorted.length, products: sorted.slice(offset, offset + catalogPageSize) };
 }

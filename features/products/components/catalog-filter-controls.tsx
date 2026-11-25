@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createSerializer, parseAsString } from "nuqs/server";
 import { SlidersHorizontal, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import type { CatalogFilterSummary } from "../catalog-filters";
+import { catalogParsers } from "../catalog-query";
 import type { ProductCollection } from "../get-catalog-products";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
@@ -65,14 +67,16 @@ interface CatalogFilterDrawerProps extends CatalogFilterControlsProps {
   appliedCount: number;
 }
 
-function DraftResultCount({ query }: { query: string }) {
+const countUrl = createSerializer({ collection: parseAsString, filter: catalogParsers.filter });
+
+function DraftResultCount({ url }: { url: string }) {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     async function loadCount() {
       try {
-        const response = await fetch(`/api/catalog/count?${query}`, { signal: controller.signal });
+        const response = await fetch(url, { signal: controller.signal });
         if (response.ok) {
           const { count } = await response.json();
           if (!controller.signal.aborted && typeof count === "number") setCount(count);
@@ -86,7 +90,7 @@ function DraftResultCount({ query }: { query: string }) {
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [query]);
+  }, [url]);
 
   return count === null ? null : ` (${count})`;
 }
@@ -127,9 +131,9 @@ export function CatalogFilterDrawer({
       }
     }
   }
-  const params = new URLSearchParams({ collection });
-  for (const id of draft) params.append("filter", id);
-  const query = params.toString();
+  const previewUrl = drawerOpen && count === undefined
+    ? countUrl("/api/catalog/count", { collection, filter: [...draft] })
+    : null;
 
   return (
     <Drawer
@@ -179,8 +183,8 @@ export function CatalogFilterDrawer({
               setDrawerOpen(false);
             }}
           >
-            View Results{count !== undefined ? ` (${count})` : drawerOpen && (
-              <DraftResultCount key={query} query={query} />
+            View Results{count !== undefined ? ` (${count})` : previewUrl && (
+              <DraftResultCount key={previewUrl} url={previewUrl} />
             )}
           </Button>
         </div>
