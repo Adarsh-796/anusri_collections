@@ -8,7 +8,6 @@ import {
   ProductCardBadge,
   ProductCardCategory,
   ProductCardContent,
-  ProductCardFabricLink,
   ProductCardFooter,
   ProductCardImage,
   ProductCardMedia,
@@ -51,7 +50,7 @@ export function BoutiqueProductCard({
     <ProductCard
       className={cn(
         "@container min-w-0",
-        isFabric && "relative bg-[#fcf6f4] dark:bg-surface",
+        isFabric && "bg-[#fcf6f4] dark:bg-surface",
       )}
     >
       <ProductCardMedia className={isFabric ? "aspect-square" : undefined}>
@@ -64,15 +63,13 @@ export function BoutiqueProductCard({
             {badge.label}
           </ProductCardBadge>
         )}
-        {isFabric ? null : (
-          <ProductCardAction
-            href={href}
-            prefetch={prefetch}
-            aria-label={`View product: ${title}`}
-          >
-            View Product
-          </ProductCardAction>
-        )}
+        <ProductCardAction
+          href={href}
+          prefetch={prefetch}
+          aria-label={`View product: ${title}`}
+        >
+          View Product
+        </ProductCardAction>
       </ProductCardMedia>
       <ProductCardContent className="gap-[clamp(0.25rem,2cqw,0.5rem)] px-[clamp(0.75rem,5.5cqw,1.25rem)] pt-[clamp(0.75rem,6cqw,1.5rem)] pb-[clamp(0.25rem,3cqw,0.875rem)]">
         <ProductCardCategory className="text-[clamp(0.6875rem,4.1cqw,0.875rem)] leading-normal">
@@ -85,13 +82,6 @@ export function BoutiqueProductCard({
           <ProductCardPrice className="text-[1rem]" unit={priceUnit}>
             {price}
           </ProductCardPrice>
-          {isFabric ? (
-            <ProductCardFabricLink
-              href={href}
-              prefetch={prefetch}
-              aria-label={`View fabric: ${title}`}
-            />
-          ) : null}
         </ProductCardFooter>
         <AddToCartButton
           productId={id}

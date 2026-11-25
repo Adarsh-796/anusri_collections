@@ -1,7 +1,6 @@
 import type { ComponentProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Scissors } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -106,23 +105,6 @@ export function ProductCardAction({
         className,
       )}
     />
-  );
-}
-
-export function ProductCardFabricLink({
-  className,
-  ...props
-}: ComponentProps<typeof Link>) {
-  return (
-    <Link
-      {...props}
-      className={cn(
-        "-me-2 grid size-11 shrink-0 place-items-center rounded-full text-[#8a6236] hover:text-primary focus-visible:outline-2 focus-visible:outline-ring after:absolute after:inset-0 after:rounded-lg focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring dark:text-gold",
-        className,
-      )}
-    >
-      <Scissors aria-hidden="true" className="size-4" />
-    </Link>
   );
 }
 
