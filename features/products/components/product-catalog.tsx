@@ -2,7 +2,10 @@ import { Suspense, type ReactNode } from "react";
 import type { SearchParams } from "nuqs/server";
 
 import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
-import { buildCatalogFilters, summarizeCatalogFilters } from "../catalog-filters";
+import {
+  buildCatalogFilters,
+  summarizeCatalogFilters,
+} from "../catalog-filters";
 import {
   getCatalogProducts,
   type ProductCollection,
@@ -57,15 +60,13 @@ export function CatalogResultsSkeleton({
   );
 }
 
-function ProductCatalogResult(props: CatalogResultsProps) {
-  return (
-    <Suspense fallback={<CatalogResultsSkeleton collection={props.collection} />}>
-      <CatalogResults {...props} />
-    </Suspense>
-  );
+// props: CatalogResultsProps
+
+function ProductCatalogResult({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
 
-async function CatalogResults({
+export async function CatalogResults({
   title,
   typeLabel,
   collection,
