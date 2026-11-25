@@ -1,10 +1,6 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { ArrowLink } from "@/components/arrow-link";
 import { cn } from "@/lib/utils";
-import {
-  BoutiqueProductGrid,
-  type BoutiqueProduct,
-} from "./boutique-product-grid";
 import SectionEyebrow from "@/features/home/components/section-eyebrow";
 
 interface ProductShowcaseProps {
@@ -16,9 +12,8 @@ interface ProductShowcaseProps {
     href: ComponentProps<typeof ArrowLink>["href"];
     label: string;
   };
-  products: readonly BoutiqueProduct[];
-  cardVariant?: ComponentProps<typeof BoutiqueProductGrid>["cardVariant"];
   className?: string;
+  children: ReactNode;
 }
 
 export default function ProductShowcase({
@@ -27,9 +22,8 @@ export default function ProductShowcase({
   title,
   description,
   viewAll,
-  products,
-  cardVariant,
   className,
+  children,
 }: ProductShowcaseProps) {
   const headingId = `${id}-title`;
   const { href, label } = viewAll;
@@ -59,12 +53,7 @@ export default function ProductShowcase({
           </ArrowLink>
         </header>
 
-        <BoutiqueProductGrid
-          products={products}
-          cardVariant={cardVariant}
-          productLinkPrefetch={false}
-          className="gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-4 xl:gap-7"
-        />
+        {children}
       </div>
     </section>
   );

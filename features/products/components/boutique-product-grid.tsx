@@ -16,7 +16,7 @@ export function BoutiqueProductGrid({
   products,
   className,
   cardVariant,
-  productLinkPrefetch,
+  productLinkPrefetch = false,
 }: BoutiqueProductGridProps) {
   return (
     <ProductGrid className={className}>
