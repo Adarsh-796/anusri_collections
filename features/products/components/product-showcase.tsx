@@ -1,9 +1,13 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { ArrowLink } from "@/components/arrow-link";
 import { cn } from "@/lib/utils";
 
-import { BoutiqueProductGrid, type BoutiqueProduct } from "./boutique-product-grid";
+import {
+  BoutiqueProductGrid,
+  type BoutiqueProduct,
+} from "./boutique-product-grid";
+import SectionEyebrow from "@/features/home/components/section-eyebrow";
 
 interface ProductShowcaseProps {
   id: string;
@@ -21,32 +25,22 @@ interface ProductShowcaseProps {
 const imageSizes =
   "(width >= 87.5rem) 19.25rem, (width >= 55rem) 22vw, (width >= 40rem) 45vw, (width >= 31rem) 28rem, calc(100vw - 2rem)";
 
-export function ProductShowcase({
+export default function ProductShowcase({
   id,
   eyebrow,
   title,
   description,
   viewAll,
   products,
-  className,
 }: ProductShowcaseProps) {
   const headingId = `${id}-title`;
 
   return (
-    <section
-      id={id}
-      aria-labelledby={headingId}
-      className={cn(
-        "bg-[#f8efe8] px-[clamp(1rem,3.6vw,3rem)] py-section dark:bg-background",
-        className,
-      )}
-    >
+    <ProductShowcaseSection headingId={headingId} id={id}>
       <div className="mx-auto w-full max-w-md sm:max-w-none">
         <header className="mb-[clamp(1rem,3.3vw,2.5rem)] flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
           <div>
-            <p className="mb-2 text-[clamp(0.6875rem,1vw,0.75rem)] font-medium tracking-[0.24em] text-[#8a6236] uppercase dark:text-gold">
-              {eyebrow}
-            </p>
+            <SectionEyebrow>{eyebrow}</SectionEyebrow>
             <h2
               id={headingId}
               className="font-heading text-[clamp(1.75rem,3.2vw,2.75rem)] leading-tight font-semibold"
@@ -57,7 +51,10 @@ export function ProductShowcase({
               {description}
             </p>
           </div>
-          <ArrowLink href={viewAll.href} className="min-h-11 shrink-0 gap-2 text-sm sm:min-h-6">
+          <ArrowLink
+            href={viewAll.href}
+            className="min-h-11 shrink-0 gap-2 text-sm sm:min-h-6"
+          >
             {viewAll.label}
           </ArrowLink>
         </header>
@@ -69,6 +66,26 @@ export function ProductShowcase({
           className="gap-[clamp(1rem,1.85vw,1.875rem)] sm:grid-cols-2 min-[55rem]:grid-cols-4"
         />
       </div>
+    </ProductShowcaseSection>
+  );
+}
+
+function ProductShowcaseSection({
+  id,
+  headingId,
+  children,
+}: {
+  id: string;
+  headingId: string;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      id={id}
+      aria-labelledby={headingId}
+      className="bg-[#f8efe8] px-[clamp(1rem,3.6vw,3rem)] py-section dark:bg-background"
+    >
+      {children}
     </section>
   );
 }
