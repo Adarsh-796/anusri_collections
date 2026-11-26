@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,8 +13,10 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import type { CatalogFilterSummary } from "../catalog-filters";
-import { matchingProductIds } from "../catalog-query";
+import { matchingProductIds, selectedCatalogFilters } from "../catalog-query";
 import { CatalogFilterFields } from "./catalog-filter-fields";
+
+import { useCatalogControls } from "./use-catalog-controls";
 
 interface CatalogFilterControlsProps {
   groups: readonly CatalogFilterSummary[];
@@ -138,4 +142,41 @@ export function CatalogFilterDrawer({
       </DrawerContent>
     </Drawer>
   );
+}
+
+type CatalogFiltersProps = Pick<CatalogFilterDrawerProps, "groups" | "collectionSize">;
+
+function FilterMenu(props: CatalogFilterDrawerProps) {
+  return (
+    <>
+      <CatalogFilterSidebar {...props} />
+      <div className="lg:hidden">
+        <CatalogFilterDrawer {...props} />
+      </div>
+    </>
+  );
+}
+
+function ConnectedFilters({ groups, collectionSize }: CatalogFiltersProps) {
+  const { controls, setControls } = useCatalogControls();
+  return (
+    <FilterMenu
+      groups={groups}
+      collectionSize={collectionSize}
+      selected={selectedCatalogFilters(groups, controls.filter)}
+      onApply={(filters) => void setControls({ filter: [...filters], page: 1 })}
+    />
+  );
+}
+
+// Render the local filter menu in the static shell. nuqs reads the URL after hydration.
+const subscribe = () => () => {};
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
+
+export function CatalogFilters(props: CatalogFiltersProps) {
+  const hydrated = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
+  return hydrated
+    ? <ConnectedFilters {...props} />
+    : <FilterMenu {...props} selected={[]} onApply={() => {}} />;
 }
