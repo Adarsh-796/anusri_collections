@@ -11,7 +11,7 @@ const collectionTitles = {
   fabrics: "Fabrics",
 } satisfies Record<ProductCollection, string>;
 
-export interface CatalogResultsProps {
+interface CatalogResultsProps {
   collection: ProductCollection;
   searchParams: Promise<SearchParams>;
 }

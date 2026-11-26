@@ -1,9 +1,4 @@
-import { Suspense, type ReactNode } from "react";
-
-import { CatalogResultsSkeleton } from "@/components/skeleton/catalog-results-skeleton";
-import { catalogFilters } from "../catalog-filters";
-import { CatalogFilters } from "./catalog-filter-controls";
-import { CatalogResults, type CatalogResultsProps } from "./catalog-results";
+import type { ReactNode } from "react";
 
 function ProductCatalogRoot({ children }: { children: ReactNode }) {
   return (
@@ -19,13 +14,10 @@ function ProductCatalogTitle({ children }: { children: ReactNode }) {
   );
 }
 
-function ProductCatalogContent(props: CatalogResultsProps) {
+function ProductCatalogContent({ children }: { children: ReactNode }) {
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
-      <CatalogFilters groups={catalogFilters[props.collection]} />
-      <Suspense fallback={<CatalogResultsSkeleton collection={props.collection} />}>
-        <CatalogResults {...props} />
-      </Suspense>
+      {children}
     </div>
   );
 }
