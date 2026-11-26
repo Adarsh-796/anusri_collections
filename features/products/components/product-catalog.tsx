@@ -1,19 +1,14 @@
 import type { ReactNode } from "react";
 import type { SearchParams } from "nuqs/server";
 
-import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
 import {
   buildCatalogFilters,
   summarizeCatalogFilters,
 } from "../catalog-filters";
-import {
-  productsByCollection,
-  type ProductCollection,
-} from "../products";
+import { productsByCollection, type ProductCollection } from "../products";
 import { CatalogBrowser } from "./catalog-browser";
 import { BoutiqueProductCard } from "./boutique-product-card";
 import {
-  catalogPageSize,
   getCatalogPage,
   loadCatalogQuery,
 } from "../catalog-query";
@@ -31,39 +26,6 @@ function ProductCatalogRoot({ children }: { children: ReactNode }) {
       {children}
     </main>
   );
-}
-
-export function CatalogResultsSkeleton({
-  collection,
-}: Pick<CatalogResultsProps, "collection">) {
-  return (
-    <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
-      <span className="sr-only" role="status">
-        Loading products…
-      </span>
-      <div
-        aria-hidden="true"
-        className="hidden h-64 rounded-lg bg-muted lg:block"
-      />
-      <div className="@container/results min-w-0">
-        <div aria-hidden="true" className="mb-4 h-14 rounded-lg bg-muted" />
-        <div className="grid grid-cols-1 gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
-          {Array.from({ length: catalogPageSize }, (_, index) => (
-            <ProductCardSkeleton
-              key={index}
-              variant={collection === "fabrics" ? "fabric" : "standard"}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// props: CatalogResultsProps
-
-function ProductCatalogResult({ children }: { children: ReactNode }) {
-  return <>{children}</>;
 }
 
 export async function CatalogResults({
@@ -107,5 +69,4 @@ function ProductCatalogTitle({ children }: { children: ReactNode }) {
 export const ProductCatalog = {
   Root: ProductCatalogRoot,
   Title: ProductCatalogTitle,
-  Result: ProductCatalogResult,
 };
