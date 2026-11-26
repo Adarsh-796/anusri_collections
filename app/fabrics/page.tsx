@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { CatalogResultsSkeleton } from "@/components/skeleton/catalog-results-skeleton";
-import { catalogFilters } from "@/features/products/catalog-filters";
+import { CollectionFilterFields } from "@/features/products/components/collection-filter-fields";
 import { CatalogFilters } from "@/features/products/components/catalog-filter-controls";
 import * as CatalogFilterMenu from "@/features/products/components/catalog-filter-menu";
 import { CatalogResults } from "@/features/products/components/catalog-results";
@@ -17,10 +17,10 @@ export default function FabricsPage({ searchParams }: PageProps<"/fabrics">) {
       <ProductCatalog.Content>
         <CatalogFilters>
           <CatalogFilterMenu.Sidebar>
-            <CatalogFilterMenu.Fields groups={catalogFilters[collection]} />
+            <CollectionFilterFields collection={collection} />
           </CatalogFilterMenu.Sidebar>
           <CatalogFilterMenu.Drawer>
-            <CatalogFilterMenu.Fields groups={catalogFilters[collection]} />
+            <CollectionFilterFields collection={collection} />
           </CatalogFilterMenu.Drawer>
         </CatalogFilters>
         <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>
