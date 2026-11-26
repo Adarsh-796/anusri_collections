@@ -1,9 +1,21 @@
 "use client";
 
-import { Suspense, type ReactNode } from "react";
+import { createContext, Suspense, use, type ReactNode } from "react";
 import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
 
-import { Root as FilterMenuRoot } from "./catalog-filter-menu";
+interface FilterMenuState {
+  selected: readonly string[];
+  onToggle?: (id: string) => void;
+  onClear?: () => void;
+}
+
+const FilterMenuContext = createContext<FilterMenuState | null>(null);
+
+export function useFilterMenu() {
+  const menu = use(FilterMenuContext);
+  if (!menu) throw new Error("Filter controls must be rendered inside CatalogFilters.");
+  return menu;
+}
 
 interface CatalogFiltersProps {
   children: ReactNode;
@@ -19,9 +31,9 @@ export function CatalogFilters({ children }: CatalogFiltersProps) {
   return (
     <Suspense
       fallback={
-        <FilterMenuRoot selected={[]}>
+        <FilterMenuContext value={{ selected: [] }}>
           {children}
-        </FilterMenuRoot>
+        </FilterMenuContext>
       }
     >
       <UrlFilterMenu>{children}</UrlFilterMenu>
@@ -42,12 +54,8 @@ function UrlFilterMenu({ children }: CatalogFiltersProps) {
   }
 
   return (
-    <FilterMenuRoot
-      selected={selected}
-      onToggle={toggleFilter}
-      onClear={() => void setSelected(null)}
-    >
+    <FilterMenuContext value={{ selected, onToggle: toggleFilter, onClear: () => void setSelected(null) }}>
       {children}
-    </FilterMenuRoot>
+    </FilterMenuContext>
   );
 }

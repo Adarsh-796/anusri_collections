@@ -11,19 +11,11 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-interface CatalogFilterDrawerProps {
-  selectedCount: number;
-  clearButton: ReactNode;
-  onReset?: () => void;
-  children: ReactNode;
-}
+import { ClearButton } from "./catalog-filter-clear-button";
+import { useFilterMenu } from "./catalog-filter-controls";
 
-export function CatalogFilterDrawer({
-  selectedCount,
-  clearButton,
-  onReset,
-  children,
-}: CatalogFilterDrawerProps) {
+export function CatalogFilterDrawer({ children }: { children: ReactNode }) {
+  const { selected, onClear } = useFilterMenu();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -45,7 +37,7 @@ export function CatalogFilterDrawer({
     >
       <DrawerTrigger className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-button border border-border px-3 text-sm font-semibold text-link focus-visible:outline-2 focus-visible:outline-ring lg:hidden">
         <SlidersHorizontal aria-hidden="true" className="size-4" />
-        Filters{selectedCount > 0 ? ` (${selectedCount})` : ""}
+        Filters{selected.length > 0 ? ` (${selected.length})` : ""}
       </DrawerTrigger>
       <DrawerContent className="h-dvh bg-surface font-body data-[swipe-axis=x]:[--drawer-content-width:100%] data-[swipe-axis=x]:sm:[--drawer-content-width:22rem] motion-reduce:transition-none">
         <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-border px-4 py-2">
@@ -53,7 +45,7 @@ export function CatalogFilterDrawer({
             <SlidersHorizontal aria-hidden="true" className="size-4" /> Filters
           </DrawerTitle>
           <div className="flex items-center gap-2">
-            {clearButton}
+            <ClearButton />
             <DrawerClose
               aria-label="Close filters"
               className="grid size-11 cursor-pointer place-items-center rounded-button focus-visible:outline-2 focus-visible:outline-ring"
@@ -70,8 +62,8 @@ export function CatalogFilterDrawer({
             type="button"
             variant="outline"
             className="min-h-11"
-            disabled={!onReset}
-            onClick={onReset}
+            disabled={!onClear}
+            onClick={onClear}
           >
             Reset
           </Button>

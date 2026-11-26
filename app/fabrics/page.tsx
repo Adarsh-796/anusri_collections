@@ -24,7 +24,11 @@ export default function FabricsPage({ searchParams }: PageProps<"/fabrics">) {
           </CatalogFilterMenu.Drawer>
         </CatalogFilters>
         <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>
-          <CatalogResults collection={collection} searchParams={searchParams} />
+          <CatalogResults.Root collection={collection} searchParams={searchParams}>
+            <CatalogResults.Toolbar />
+            <CatalogResults.Grid />
+            <CatalogResults.Pagination />
+          </CatalogResults.Root>
         </Suspense>
       </ProductCatalog.Content>
       <RelatedCollections current={collection} />

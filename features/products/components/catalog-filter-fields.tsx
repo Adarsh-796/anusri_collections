@@ -1,13 +1,14 @@
 import { Check, ChevronDown } from "lucide-react";
 import type { CatalogFilterGroup } from "../catalog-filters";
 
+import { useFilterMenu } from "./catalog-filter-controls";
+
 interface CatalogFilterFieldsProps {
   groups: readonly CatalogFilterGroup[];
-  selected: readonly string[];
-  onToggle?: (id: string) => void;
 }
 
-export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilterFieldsProps) {
+export function CatalogFilterFields({ groups }: CatalogFilterFieldsProps) {
+  const { selected, onToggle } = useFilterMenu();
   return (
     <div className="divide-y divide-border/70 px-4">
       {groups.map(({ title, options }, index) => (
