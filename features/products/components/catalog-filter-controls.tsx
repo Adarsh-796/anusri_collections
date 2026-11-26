@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { createSerializer, parseAsString } from "nuqs/server";
 import { SlidersHorizontal, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import type { CatalogFilterSummary } from "../catalog-filters";
-import { catalogParsers } from "../catalog-query";
-import type { ProductCollection } from "../get-catalog-products";
+import { matchingProductIds } from "../catalog-query";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
 interface CatalogFilterControlsProps {
@@ -61,48 +59,14 @@ export function CatalogFilterSidebar({ groups, selected, onApply }: CatalogFilte
 }
 
 interface CatalogFilterDrawerProps extends CatalogFilterControlsProps {
-  collection: ProductCollection;
   collectionSize: number;
-  appliedFilters: readonly string[];
-  appliedCount: number;
-}
-
-const countUrl = createSerializer({ collection: parseAsString, filter: catalogParsers.filter });
-
-function DraftResultCount({ url }: { url: string }) {
-  const [count, setCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function loadCount() {
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-        if (response.ok) {
-          const { count } = await response.json();
-          if (!controller.signal.aborted && typeof count === "number") setCount(count);
-        }
-      } catch {
-        // Applying the filters still works when the optional preview is unavailable.
-      }
-    }
-    const timer = window.setTimeout(loadCount, 200);
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
-    };
-  }, [url]);
-
-  return count === null ? null : ` (${count})`;
 }
 
 export function CatalogFilterDrawer({
   groups,
   selected,
   onApply,
-  collection,
   collectionSize,
-  appliedFilters,
-  appliedCount,
 }: CatalogFilterDrawerProps) {
   const [draft, setDraft] = useState<readonly string[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -118,22 +82,7 @@ export function CatalogFilterDrawer({
     return () => desktop.removeEventListener("change", closeOnDesktop);
   }, [drawerOpen]);
 
-  let count: number | undefined;
-  if (!draft.length) count = collectionSize;
-  else if (draft.length === appliedFilters.length && draft.every((id) => appliedFilters.includes(id))) {
-    count = appliedCount;
-  } else if (draft.length === 1) {
-    for (const group of groups) {
-      const option = group.options.find(({ id }) => id === draft[0]);
-      if (option) {
-        count = option.count;
-        break;
-      }
-    }
-  }
-  const previewUrl = drawerOpen && count === undefined
-    ? countUrl("/api/catalog/count", { collection, filter: [...draft] })
-    : null;
+  const count = matchingProductIds(groups, draft)?.size ?? collectionSize;
 
   return (
     <Drawer
@@ -183,9 +132,7 @@ export function CatalogFilterDrawer({
               setDrawerOpen(false);
             }}
           >
-            View Results{count !== undefined ? ` (${count})` : previewUrl && (
-              <DraftResultCount key={previewUrl} url={previewUrl} />
-            )}
+            View Results ({count})
           </Button>
         </div>
       </DrawerContent>

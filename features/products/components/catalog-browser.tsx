@@ -11,7 +11,6 @@ import {
   PaginationItem,
 } from "@/components/ui/pagination";
 import type { CatalogFilterSummary } from "../catalog-filters";
-import type { ProductCollection } from "../get-catalog-products";
 import {
   catalogPageSize,
   catalogParsers,
@@ -26,7 +25,6 @@ import {
 
 interface CatalogBrowserProps {
   title: string;
-  collection: ProductCollection;
   groups: readonly CatalogFilterSummary[];
   query: CatalogQuery;
   total: number;
@@ -36,7 +34,6 @@ interface CatalogBrowserProps {
 
 export function CatalogBrowser({
   title,
-  collection,
   groups,
   query,
   total,
@@ -87,10 +84,7 @@ export function CatalogBrowser({
             groups={groups}
             selected={selected}
             onApply={applyFilters}
-            collection={collection}
             collectionSize={collectionSize}
-            appliedFilters={query.filter}
-            appliedCount={total}
           />
 
           <p

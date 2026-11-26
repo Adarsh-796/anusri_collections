@@ -1,5 +1,5 @@
 import type { BoutiqueProduct } from "./components/boutique-product-grid";
-import type { ProductCollection } from "./get-catalog-products";
+import type { ProductCollection } from "./products";
 
 const colors = {
   Burgundy: "#701b34",
@@ -10,10 +10,6 @@ const colors = {
   "Royal Blue": "#293e83",
   Plum: "#633447",
 };
-
-export function isCatalogColor(value: unknown): value is keyof typeof colors {
-  return typeof value === "string" && Object.hasOwn(colors, value);
-}
 
 export type CatalogProduct = Omit<BoutiqueProduct, "price"> & {
   price: number;
@@ -37,7 +33,7 @@ export function summarizeCatalogFilters(groups: readonly CatalogFilterGroup[]) {
   return groups.map(({ title, options }) => ({
     title,
     options: options.map(({ id, label, swatch, productIds }) => ({
-      id, label, swatch, count: productIds.length,
+      id, label, swatch, productIds, count: productIds.length,
     })),
   }));
 }

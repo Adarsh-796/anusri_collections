@@ -150,3 +150,11 @@ export const fabricProducts = [
     href: "/fabrics/mukaish-embroidered-net",
   },
 ] as const satisfies readonly CatalogProduct[];
+
+export const productsByCollection = {
+  sarees: boutiqueProducts,
+  dresses: dressProducts,
+  fabrics: fabricProducts,
+};
+
+export type ProductCollection = keyof typeof productsByCollection;

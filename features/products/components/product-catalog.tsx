@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { SearchParams } from "nuqs/server";
 
 import { ProductCardSkeleton } from "@/components/skeleton/product-card-skeleton";
@@ -7,9 +7,9 @@ import {
   summarizeCatalogFilters,
 } from "../catalog-filters";
 import {
-  getCatalogProducts,
+  productsByCollection,
   type ProductCollection,
-} from "../get-catalog-products";
+} from "../products";
 import { CatalogBrowser } from "./catalog-browser";
 import { BoutiqueProductCard } from "./boutique-product-card";
 import {
@@ -72,17 +72,14 @@ export async function CatalogResults({
   collection,
   searchParams,
 }: CatalogResultsProps) {
-  const [products, params] = await Promise.all([
-    getCatalogProducts(collection),
-    loadCatalogQuery(searchParams),
-  ]);
+  const products = productsByCollection[collection];
+  const params = await loadCatalogQuery(searchParams);
   const groups = buildCatalogFilters(products, collection, typeLabel);
   const result = getCatalogPage(products, groups, params);
 
   return (
     <CatalogBrowser
       title={title}
-      collection={collection}
       groups={summarizeCatalogFilters(groups)}
       query={result.query}
       total={result.total}
