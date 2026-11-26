@@ -19,102 +19,51 @@ export type CatalogProduct = Omit<BoutiqueProduct, "price"> & {
   occasions?: readonly string[];
 };
 
+interface FilterOption {
+  id: string;
+  label: string;
+  swatch?: string;
+}
+
 export interface CatalogFilterGroup {
   title: string;
-  options: ReadonlyArray<{
-    id: string;
-    label: string;
-    productIds: string[];
-    swatch?: string;
-  }>;
+  options: readonly FilterOption[];
 }
 
-export function summarizeCatalogFilters(groups: readonly CatalogFilterGroup[]) {
-  return groups.map(({ title, options }) => ({
-    title,
-    options: options.map(({ id, label, swatch, productIds }) => ({
-      id, label, swatch, productIds, count: productIds.length,
-    })),
-  }));
+function styles(title: string, labels: string[]): CatalogFilterGroup {
+  return { title, options: labels.map(label => ({ id: "style:" + label, label })) };
 }
 
-export type CatalogFilterSummary = ReturnType<typeof summarizeCatalogFilters>[number];
-
-const apparelPrices = [
-  { label: "Under ₹5,000", max: 5000 },
-  { label: "₹5,000 to under ₹10,000", min: 5000, max: 10000 },
-  { label: "₹10,000 to under ₹20,000", min: 10000, max: 20000 },
-  { label: "₹20,000 and above", min: 20000 },
-] as const;
-
-const fabricPrices = [
-  { label: "Under ₹1,500", max: 1500 },
-  { label: "₹1,500 to under ₹2,000", min: 1500, max: 2000 },
-  { label: "₹2,000 and above", min: 2000 },
-] as const;
-
-function groupOptions(
-  key: string,
-  title: string,
-  products: readonly CatalogProduct[],
-  getLabels: (product: CatalogProduct) => readonly string[],
-): CatalogFilterGroup {
-  const matches = new Map<string, string[]>();
-  for (const product of products) {
-    for (const label of getLabels(product)) {
-      const ids = matches.get(label);
-      if (ids) ids.push(product.id);
-      else matches.set(label, [product.id]);
-    }
-  }
-
+function colorOptions(labels: (keyof typeof colors)[]): CatalogFilterGroup {
   return {
-    title,
-    options: Array.from(matches, ([label, productIds]) => ({
-      id: `${key}:${label}`,
-      label,
-      productIds,
-      swatch: key === "color" ? colors[label as keyof typeof colors] : undefined,
-    })),
+    title: "Color",
+    options: labels.map(label => ({ id: "color:" + label, label, swatch: colors[label] })),
   };
 }
 
-export function buildCatalogFilters(
-  products: readonly CatalogProduct[],
-  collection: ProductCollection,
-  typeLabel: string,
-) {
-  const soldByMeter = products.length > 0 && products.every((product) => product.priceUnit === "meter");
-  const ranges = soldByMeter ? fabricPrices : apparelPrices;
-  const type = groupOptions("style", typeLabel, products, (product) => [product.style ?? product.category]);
-  const color = groupOptions("color", "Color", products, (product) => [product.color]);
-  const groups = collection === "fabrics"
-    ? [
-        type,
-        color,
-        groupOptions("occasion", "Occasion", products, (product) => product.occasions ?? []),
-      ]
-    : [type, color];
+const midrange = { id: "price:2", label: "₹10,000 to under ₹20,000" };
 
-  return [
-    ...groups,
+export const catalogFilters = {
+  sarees: [
+    styles("Saree Type", ["Silk Sarees", "Festive Sarees", "Handloom Sarees"]),
+    colorOptions(["Burgundy", "Blush", "Emerald", "Gold"]),
+    { title: "Price", options: [midrange, { id: "price:3", label: "₹20,000 and above" }] },
+  ],
+  dresses: [
+    styles("Dress Type", ["Couture Anarkali", "Festive Gown", "Sharara Set", "Cape Ensemble"]),
+    colorOptions(["Burgundy", "Ivory", "Blush", "Royal Blue"]),
+    { title: "Price", options: [midrange] },
+  ],
+  fabrics: [
+    styles("Textile Type", ["Pure Brocade Silk", "Raw Silk", "Organza Silk", "Hand Embroidered Net"]),
+    colorOptions(["Burgundy", "Gold", "Ivory", "Plum"]),
     {
-      title: soldByMeter ? "Price per meter" : "Price",
-      options: ranges.map((range, index) => ({
-        id: `price:${index}`,
-        label: range.label,
-        productIds: products
-          .filter(({ price }) =>
-            price >= ("min" in range ? range.min : 0) &&
-            (!("max" in range) || price < range.max),
-          )
-          .map(({ id }) => id),
-      })),
+      title: "Price per meter",
+      options: [
+        { id: "price:0", label: "Under ₹1,500" },
+        { id: "price:1", label: "₹1,500 to under ₹2,000" },
+        { id: "price:2", label: "₹2,000 and above" },
+      ],
     },
-  ]
-    .map((group) => ({
-      ...group,
-      options: group.options.filter(({ productIds }) => productIds.length > 0),
-    }))
-    .filter(({ options }) => options.length > 0);
-}
+  ],
+} satisfies Record<ProductCollection, CatalogFilterGroup[]>;

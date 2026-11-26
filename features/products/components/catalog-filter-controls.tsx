@@ -12,14 +12,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import type { CatalogFilterSummary } from "../catalog-filters";
-import { matchingProductIds, selectedCatalogFilters } from "../catalog-query";
+import type { CatalogFilterGroup } from "../catalog-filters";
+import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
-import { useCatalogControls } from "./use-catalog-controls";
+const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({ history: "push", shallow: true, scroll: false });
 
 interface CatalogFilterControlsProps {
-  groups: readonly CatalogFilterSummary[];
+  groups: readonly CatalogFilterGroup[];
   selected: readonly string[];
   onApply: (filters: readonly string[]) => void;
 }
@@ -62,17 +62,11 @@ export function CatalogFilterSidebar({ groups, selected, onApply }: CatalogFilte
   );
 }
 
-interface CatalogFilterDrawerProps extends CatalogFilterControlsProps {
-  collectionSize: number;
-}
-
 export function CatalogFilterDrawer({
   groups,
   selected,
   onApply,
-  collectionSize,
-}: CatalogFilterDrawerProps) {
-  const [draft, setDraft] = useState<readonly string[]>([]);
+}: CatalogFilterControlsProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -86,17 +80,11 @@ export function CatalogFilterDrawer({
     return () => desktop.removeEventListener("change", closeOnDesktop);
   }, [drawerOpen]);
 
-  const count = matchingProductIds(groups, draft)?.size ?? collectionSize;
-
   return (
     <Drawer
       swipeDirection="left"
       open={drawerOpen}
-      onOpenChange={(open) => {
-        // The popup stays mounted during its exit animation.
-        if (open) setDraft(selected);
-        setDrawerOpen(open);
-      }}
+      onOpenChange={setDrawerOpen}
     >
       <DrawerTrigger className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-button border border-border px-3 text-sm font-semibold text-link focus-visible:outline-2 focus-visible:outline-ring lg:hidden">
         <SlidersHorizontal aria-hidden="true" className="size-4" />
@@ -108,7 +96,7 @@ export function CatalogFilterDrawer({
             <SlidersHorizontal aria-hidden="true" className="size-4" /> Filters
           </DrawerTitle>
           <div className="flex items-center gap-2">
-            <ClearFilters disabled={draft.length === 0} onClick={() => setDraft([])} />
+            <ClearFilters disabled={selected.length === 0} onClick={() => onApply([])} />
             <DrawerClose
               aria-label="Close filters"
               className="grid size-11 cursor-pointer place-items-center rounded-button focus-visible:outline-2 focus-visible:outline-ring"
@@ -120,23 +108,20 @@ export function CatalogFilterDrawer({
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <CatalogFilterFields
             groups={groups}
-            selected={draft}
-            onToggle={(id) => setDraft((filters) => toggleOption(filters, id))}
+            selected={selected}
+            onToggle={(id) => onApply(toggleOption(selected, id))}
           />
         </div>
         <div className="grid shrink-0 grid-cols-[1fr_1.45fr] gap-2 border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <Button type="button" variant="outline" className="min-h-11" onClick={() => setDraft([])}>
+          <Button type="button" variant="outline" className="min-h-11" onClick={() => onApply([])}>
             Reset
           </Button>
           <Button
             type="button"
             className="min-h-11"
-            onClick={() => {
-              onApply(draft);
-              setDrawerOpen(false);
-            }}
+            onClick={() => setDrawerOpen(false)}
           >
-            View Results ({count})
+            Done
           </Button>
         </div>
       </DrawerContent>
@@ -144,9 +129,9 @@ export function CatalogFilterDrawer({
   );
 }
 
-type CatalogFiltersProps = Pick<CatalogFilterDrawerProps, "groups" | "collectionSize">;
+type CatalogFiltersProps = Pick<CatalogFilterControlsProps, "groups">;
 
-function FilterMenu(props: CatalogFilterDrawerProps) {
+function FilterMenu(props: CatalogFilterControlsProps) {
   return (
     <>
       <CatalogFilterSidebar {...props} />
@@ -157,14 +142,13 @@ function FilterMenu(props: CatalogFilterDrawerProps) {
   );
 }
 
-function ConnectedFilters({ groups, collectionSize }: CatalogFiltersProps) {
-  const { controls, setControls } = useCatalogControls();
+function ConnectedFilters({ groups }: CatalogFiltersProps) {
+  const [selected, setSelected] = useQueryState("filter", filterParam);
   return (
     <FilterMenu
       groups={groups}
-      collectionSize={collectionSize}
-      selected={selectedCatalogFilters(groups, controls.filter)}
-      onApply={(filters) => void setControls({ filter: [...filters], page: 1 })}
+      selected={selected}
+      onApply={(filters) => void setSelected(filters.length ? [...filters] : null)}
     />
   );
 }

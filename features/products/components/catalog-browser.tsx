@@ -14,7 +14,6 @@ import {
   catalogParsers,
   type CatalogQuery,
 } from "../catalog-query";
-import { ClearFilters } from "./catalog-filter-controls";
 import { useCatalogControls } from "./use-catalog-controls";
 
 interface CatalogBrowserProps {
@@ -58,7 +57,7 @@ export function CatalogBrowser({
         >
           {total
             ? `Showing ${offset + 1}–${Math.min(offset + catalogPageSize, total)} of ${total} ${title.toLowerCase()}`
-            : `No matching ${title.toLowerCase()}`}
+            : `No ${title.toLowerCase()} available`}
         </p>
         <label className="ms-auto flex min-w-0 items-center gap-1 text-sm text-text-secondary">
           <span className="whitespace-nowrap">Sort by</span>
@@ -82,17 +81,7 @@ export function CatalogBrowser({
         <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
           {children}
         </ul>
-      ) : (
-        <div className="rounded-lg border border-border bg-surface px-5 py-10 text-center">
-          <p className="text-sm text-text-secondary">
-            Try clearing your filters to see more products.
-          </p>
-          <ClearFilters
-            disabled={query.filter.length === 0}
-            onClick={() => void setControls({ filter: [], page: 1 })}
-          />
-        </div>
-      )}
+      ) : null}
 
       {pageCount > 1 ? (
         <Pagination aria-label="Catalog pages" className="mt-6">

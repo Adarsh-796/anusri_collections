@@ -2,11 +2,7 @@ import { Suspense, type ReactNode } from "react";
 import type { SearchParams } from "nuqs/server";
 
 import { CatalogResultsSkeleton } from "@/components/skeleton/catalog-results-skeleton";
-import {
-  buildCatalogFilters,
-  summarizeCatalogFilters,
-  type CatalogFilterGroup,
-} from "../catalog-filters";
+import { catalogFilters } from "../catalog-filters";
 import { getCatalogPage, loadCatalogQuery } from "../catalog-query";
 import { productsByCollection, type ProductCollection } from "../products";
 import { CatalogBrowser } from "./catalog-browser";
@@ -14,10 +10,10 @@ import { BoutiqueProductCard } from "./boutique-product-card";
 import { CatalogFilters } from "./catalog-filter-controls";
 
 const collections = {
-  sarees: { title: "Sarees", typeLabel: "Saree Type" },
-  dresses: { title: "Dresses", typeLabel: "Dress Type" },
-  fabrics: { title: "Fabrics", typeLabel: "Textile Type" },
-} satisfies Record<ProductCollection, { title: string; typeLabel: string }>;
+  sarees: "Sarees",
+  dresses: "Dresses",
+  fabrics: "Fabrics",
+} satisfies Record<ProductCollection, string>;
 
 interface CatalogProps {
   collection: ProductCollection;
@@ -33,13 +29,11 @@ function ProductCatalogRoot({ children }: { children: ReactNode }) {
 }
 
 function CatalogContent({ collection, searchParams }: CatalogProps) {
-  const products = productsByCollection[collection];
-  const groups = buildCatalogFilters(products, collection, collections[collection].typeLabel);
   return (
     <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)] lg:gap-5">
-      <CatalogFilters groups={summarizeCatalogFilters(groups)} collectionSize={products.length} />
+      <CatalogFilters groups={catalogFilters[collection]} />
       <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>
-        <CatalogResults collection={collection} searchParams={searchParams} groups={groups} />
+        <CatalogResults collection={collection} searchParams={searchParams} />
       </Suspense>
     </div>
   );
@@ -48,15 +42,14 @@ function CatalogContent({ collection, searchParams }: CatalogProps) {
 async function CatalogResults({
   collection,
   searchParams,
-  groups,
-}: CatalogProps & { groups: readonly CatalogFilterGroup[] }) {
+}: CatalogProps) {
   const products = productsByCollection[collection];
   const params = await loadCatalogQuery(searchParams);
-  const result = getCatalogPage(products, groups, params);
+  const result = getCatalogPage(products, params);
 
   return (
     <CatalogBrowser
-      title={collections[collection].title}
+      title={collections[collection]}
       query={result.query}
       total={result.total}
     >
