@@ -15,12 +15,12 @@ export default function DressesPage({ searchParams }: PageProps<"/dresses">) {
     <ProductCatalog.Root>
       <ProductCatalog.Title>Dresses</ProductCatalog.Title>
       <ProductCatalog.Content>
-        <CatalogFilters groups={catalogFilters[collection]}>
+        <CatalogFilters>
           <CatalogFilterMenu.Sidebar>
-            <CatalogFilterMenu.Fields />
+            <CatalogFilterMenu.Fields groups={catalogFilters[collection]} />
           </CatalogFilterMenu.Sidebar>
           <CatalogFilterMenu.Drawer>
-            <CatalogFilterMenu.Fields />
+            <CatalogFilterMenu.Fields groups={catalogFilters[collection]} />
           </CatalogFilterMenu.Drawer>
         </CatalogFilters>
         <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>

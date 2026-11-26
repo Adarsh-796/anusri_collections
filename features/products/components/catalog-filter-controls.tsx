@@ -3,11 +3,9 @@
 import { Suspense, type ReactNode } from "react";
 import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
 
-import type { CatalogFilterGroup } from "../catalog-filters";
 import { Root as FilterMenuRoot } from "./catalog-filter-menu";
 
 interface CatalogFiltersProps {
-  groups: readonly CatalogFilterGroup[];
   children: ReactNode;
 }
 
@@ -17,21 +15,21 @@ const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
   scroll: false,
 });
 
-export function CatalogFilters({ groups, children }: CatalogFiltersProps) {
+export function CatalogFilters({ children }: CatalogFiltersProps) {
   return (
     <Suspense
       fallback={
-        <FilterMenuRoot groups={groups} selected={[]}>
+        <FilterMenuRoot selected={[]}>
           {children}
         </FilterMenuRoot>
       }
     >
-      <UrlFilterMenu groups={groups}>{children}</UrlFilterMenu>
+      <UrlFilterMenu>{children}</UrlFilterMenu>
     </Suspense>
   );
 }
 
-function UrlFilterMenu({ groups, children }: CatalogFiltersProps) {
+function UrlFilterMenu({ children }: CatalogFiltersProps) {
   const [selected, setSelected] = useQueryState("filter", filterParam);
 
   function toggleFilter(id: string) {
@@ -45,7 +43,6 @@ function UrlFilterMenu({ groups, children }: CatalogFiltersProps) {
 
   return (
     <FilterMenuRoot
-      groups={groups}
       selected={selected}
       onToggle={toggleFilter}
       onClear={() => void setSelected(null)}

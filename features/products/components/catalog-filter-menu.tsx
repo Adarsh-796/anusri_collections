@@ -8,7 +8,6 @@ import { CatalogFilterDrawer } from "./catalog-filter-drawer";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
 interface FilterMenuState {
-  groups: readonly CatalogFilterGroup[];
   selected: readonly string[];
   onToggle?: (id: string) => void;
   onClear?: () => void;
@@ -26,8 +25,8 @@ export function Root({ children, ...state }: FilterMenuState & { children: React
   return <FilterMenuContext value={state}>{children}</FilterMenuContext>;
 }
 
-export function Fields() {
-  const { groups, selected, onToggle } = useFilterMenu();
+export function Fields({ groups }: { groups: readonly CatalogFilterGroup[] }) {
+  const { selected, onToggle } = useFilterMenu();
   return <CatalogFilterFields groups={groups} selected={selected} onToggle={onToggle} />;
 }
 
