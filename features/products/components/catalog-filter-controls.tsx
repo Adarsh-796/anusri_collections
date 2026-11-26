@@ -4,10 +4,11 @@ import { Suspense, type ReactNode } from "react";
 import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
 
 import type { CatalogFilterGroup } from "../catalog-filters";
-import { CatalogFilterMenu } from "./catalog-filter-menu";
+import { Root as FilterMenuRoot } from "./catalog-filter-menu";
 
 interface CatalogFiltersProps {
   groups: readonly CatalogFilterGroup[];
+  children: ReactNode;
 }
 
 const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
@@ -16,32 +17,21 @@ const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
   scroll: false,
 });
 
-export function CatalogFilters({ groups }: CatalogFiltersProps) {
-  const menu = (
-    <>
-      <CatalogFilterMenu.Sidebar>
-        <CatalogFilterMenu.Fields />
-      </CatalogFilterMenu.Sidebar>
-      <CatalogFilterMenu.Drawer>
-        <CatalogFilterMenu.Fields />
-      </CatalogFilterMenu.Drawer>
-    </>
-  );
-
+export function CatalogFilters({ groups, children }: CatalogFiltersProps) {
   return (
     <Suspense
       fallback={
-        <CatalogFilterMenu.Root groups={groups} selected={[]}>
-          {menu}
-        </CatalogFilterMenu.Root>
+        <FilterMenuRoot groups={groups} selected={[]}>
+          {children}
+        </FilterMenuRoot>
       }
     >
-      <UrlFilterMenu groups={groups}>{menu}</UrlFilterMenu>
+      <UrlFilterMenu groups={groups}>{children}</UrlFilterMenu>
     </Suspense>
   );
 }
 
-function UrlFilterMenu({ groups, children }: CatalogFiltersProps & { children: ReactNode }) {
+function UrlFilterMenu({ groups, children }: CatalogFiltersProps) {
   const [selected, setSelected] = useQueryState("filter", filterParam);
 
   function toggleFilter(id: string) {
@@ -54,13 +44,13 @@ function UrlFilterMenu({ groups, children }: CatalogFiltersProps & { children: R
   }
 
   return (
-    <CatalogFilterMenu.Root
+    <FilterMenuRoot
       groups={groups}
       selected={selected}
       onToggle={toggleFilter}
       onClear={() => void setSelected(null)}
     >
       {children}
-    </CatalogFilterMenu.Root>
+    </FilterMenuRoot>
   );
 }

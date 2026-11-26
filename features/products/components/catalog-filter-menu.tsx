@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, use, type ReactNode } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
@@ -20,11 +22,11 @@ function useFilterMenu() {
   return menu;
 }
 
-function Root({ children, ...state }: FilterMenuState & { children: ReactNode }) {
+export function Root({ children, ...state }: FilterMenuState & { children: ReactNode }) {
   return <FilterMenuContext value={state}>{children}</FilterMenuContext>;
 }
 
-function Fields() {
+export function Fields() {
   const { groups, selected, onToggle } = useFilterMenu();
   return <CatalogFilterFields groups={groups} selected={selected} onToggle={onToggle} />;
 }
@@ -43,7 +45,7 @@ function ClearButton() {
   );
 }
 
-function Sidebar({ children }: { children: ReactNode }) {
+export function Sidebar({ children }: { children: ReactNode }) {
   return (
     <aside
       aria-label="Filters"
@@ -61,7 +63,7 @@ function Sidebar({ children }: { children: ReactNode }) {
   );
 }
 
-function Drawer({ children }: { children: ReactNode }) {
+export function Drawer({ children }: { children: ReactNode }) {
   const { selected, onClear } = useFilterMenu();
   return (
     <div className="lg:hidden">
@@ -75,5 +77,3 @@ function Drawer({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-export const CatalogFilterMenu = { Root, Sidebar, Drawer, Fields };
