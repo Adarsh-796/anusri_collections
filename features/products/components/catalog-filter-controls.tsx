@@ -1,166 +1,53 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import type { CatalogFilterGroup } from "../catalog-filters";
+import { Suspense } from "react";
 import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
-import { CatalogFilterFields } from "./catalog-filter-fields";
 
-const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({ history: "push", shallow: true, scroll: false });
+import type { CatalogFilterGroup } from "../catalog-filters";
+import { CatalogFilterMenu } from "./catalog-filter-menu";
 
-interface CatalogFilterControlsProps {
+interface CatalogFiltersProps {
   groups: readonly CatalogFilterGroup[];
-  selected: readonly string[];
-  onApply: (filters: readonly string[]) => void;
 }
 
-function toggleOption(selected: readonly string[], id: string) {
-  return selected.includes(id)
-    ? selected.filter((option) => option !== id)
-    : [...selected, id];
-}
+const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
+  history: "push",
+  shallow: true,
+  scroll: false,
+});
 
-export function ClearFilters({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
+function noop() {}
+
+export function CatalogFilters({ groups }: CatalogFiltersProps) {
+  const fallback = (
+    <CatalogFilterMenu groups={groups} selected={[]} onToggle={noop} onClear={noop} />
+  );
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="min-h-10 cursor-pointer rounded-sm text-xs font-semibold whitespace-nowrap text-link underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ring disabled:cursor-default disabled:text-text-secondary"
-    >
-      Clear All
-    </button>
+    <Suspense fallback={fallback}>
+      <UrlFilterMenu groups={groups} />
+    </Suspense>
   );
 }
 
-export function CatalogFilterSidebar({ groups, selected, onApply }: CatalogFilterControlsProps) {
-  return (
-    <aside aria-label="Filters" className="hidden rounded-lg border border-border bg-surface lg:block">
-      <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-1">
-        <h2 className="flex items-center gap-2 font-body text-sm font-semibold">
-          <SlidersHorizontal aria-hidden="true" className="size-4" />
-          Filters
-        </h2>
-        <ClearFilters disabled={selected.length === 0} onClick={() => onApply([])} />
-      </div>
-      <CatalogFilterFields
-        groups={groups}
-        selected={selected}
-        onToggle={(id) => onApply(toggleOption(selected, id))}
-      />
-    </aside>
-  );
-}
-
-export function CatalogFilterDrawer({
-  groups,
-  selected,
-  onApply,
-}: CatalogFilterControlsProps) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    if (!drawerOpen) return;
-
-    const desktop = window.matchMedia("(min-width: 64rem)");
-    const closeOnDesktop = (event: MediaQueryListEvent) => {
-      if (event.matches) setDrawerOpen(false);
-    };
-    desktop.addEventListener("change", closeOnDesktop);
-    return () => desktop.removeEventListener("change", closeOnDesktop);
-  }, [drawerOpen]);
-
-  return (
-    <Drawer
-      swipeDirection="left"
-      open={drawerOpen}
-      onOpenChange={setDrawerOpen}
-    >
-      <DrawerTrigger className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-button border border-border px-3 text-sm font-semibold text-link focus-visible:outline-2 focus-visible:outline-ring lg:hidden">
-        <SlidersHorizontal aria-hidden="true" className="size-4" />
-        Filters{selected.length > 0 ? ` (${selected.length})` : ""}
-      </DrawerTrigger>
-      <DrawerContent className="h-dvh bg-surface font-body data-[swipe-axis=x]:[--drawer-content-width:100%] data-[swipe-axis=x]:sm:[--drawer-content-width:22rem] motion-reduce:transition-none">
-        <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-border px-4 py-2">
-          <DrawerTitle className="flex items-center gap-2 font-body text-base font-semibold">
-            <SlidersHorizontal aria-hidden="true" className="size-4" /> Filters
-          </DrawerTitle>
-          <div className="flex items-center gap-2">
-            <ClearFilters disabled={selected.length === 0} onClick={() => onApply([])} />
-            <DrawerClose
-              aria-label="Close filters"
-              className="grid size-11 cursor-pointer place-items-center rounded-button focus-visible:outline-2 focus-visible:outline-ring"
-            >
-              <X aria-hidden="true" className="size-5" />
-            </DrawerClose>
-          </div>
-        </DrawerHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <CatalogFilterFields
-            groups={groups}
-            selected={selected}
-            onToggle={(id) => onApply(toggleOption(selected, id))}
-          />
-        </div>
-        <div className="grid shrink-0 grid-cols-[1fr_1.45fr] gap-2 border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <Button type="button" variant="outline" className="min-h-11" onClick={() => onApply([])}>
-            Reset
-          </Button>
-          <Button
-            type="button"
-            className="min-h-11"
-            onClick={() => setDrawerOpen(false)}
-          >
-            Done
-          </Button>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-type CatalogFiltersProps = Pick<CatalogFilterControlsProps, "groups">;
-
-function FilterMenu(props: CatalogFilterControlsProps) {
-  return (
-    <>
-      <CatalogFilterSidebar {...props} />
-      <div className="lg:hidden">
-        <CatalogFilterDrawer {...props} />
-      </div>
-    </>
-  );
-}
-
-function ConnectedFilters({ groups }: CatalogFiltersProps) {
+function UrlFilterMenu({ groups }: CatalogFiltersProps) {
   const [selected, setSelected] = useQueryState("filter", filterParam);
+
+  function toggleFilter(id: string) {
+    void setSelected(current => {
+      const next = current.includes(id)
+        ? current.filter(option => option !== id)
+        : [...current, id];
+      return next.length ? next : null;
+    });
+  }
+
   return (
-    <FilterMenu
+    <CatalogFilterMenu
       groups={groups}
       selected={selected}
-      onApply={(filters) => void setSelected(filters.length ? [...filters] : null)}
+      onToggle={toggleFilter}
+      onClear={() => void setSelected(null)}
     />
   );
-}
-
-// Render the local filter menu in the static shell. nuqs reads the URL after hydration.
-const subscribe = () => () => {};
-const clientSnapshot = () => true;
-const serverSnapshot = () => false;
-
-export function CatalogFilters(props: CatalogFiltersProps) {
-  const hydrated = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
-  return hydrated
-    ? <ConnectedFilters {...props} />
-    : <FilterMenu {...props} selected={[]} onApply={() => {}} />;
 }
