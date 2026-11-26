@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { parseAsNativeArrayOf, parseAsString, useQueryState } from "nuqs";
 
 import type { CatalogFilterGroup } from "../catalog-filters";
@@ -17,14 +17,31 @@ const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
 });
 
 export function CatalogFilters({ groups }: CatalogFiltersProps) {
+  const menu = (
+    <>
+      <CatalogFilterMenu.Sidebar>
+        <CatalogFilterMenu.Fields />
+      </CatalogFilterMenu.Sidebar>
+      <CatalogFilterMenu.Drawer>
+        <CatalogFilterMenu.Fields />
+      </CatalogFilterMenu.Drawer>
+    </>
+  );
+
   return (
-    <Suspense fallback={<CatalogFilterMenu groups={groups} />}>
-      <UrlFilterMenu groups={groups} />
+    <Suspense
+      fallback={
+        <CatalogFilterMenu.Root groups={groups} selected={[]}>
+          {menu}
+        </CatalogFilterMenu.Root>
+      }
+    >
+      <UrlFilterMenu groups={groups}>{menu}</UrlFilterMenu>
     </Suspense>
   );
 }
 
-function UrlFilterMenu({ groups }: CatalogFiltersProps) {
+function UrlFilterMenu({ groups, children }: CatalogFiltersProps & { children: ReactNode }) {
   const [selected, setSelected] = useQueryState("filter", filterParam);
 
   function toggleFilter(id: string) {
@@ -37,11 +54,13 @@ function UrlFilterMenu({ groups }: CatalogFiltersProps) {
   }
 
   return (
-    <CatalogFilterMenu
+    <CatalogFilterMenu.Root
       groups={groups}
       selected={selected}
       onToggle={toggleFilter}
       onClear={() => void setSelected(null)}
-    />
+    >
+      {children}
+    </CatalogFilterMenu.Root>
   );
 }

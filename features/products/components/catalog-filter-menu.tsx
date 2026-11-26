@@ -1,19 +1,37 @@
+import { createContext, use, type ReactNode } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
 import type { CatalogFilterGroup } from "../catalog-filters";
 import { CatalogFilterDrawer } from "./catalog-filter-drawer";
 import { CatalogFilterFields } from "./catalog-filter-fields";
 
-interface CatalogFilterMenuProps {
+interface FilterMenuState {
   groups: readonly CatalogFilterGroup[];
-  selected?: readonly string[];
+  selected: readonly string[];
   onToggle?: (id: string) => void;
   onClear?: () => void;
 }
 
-export function CatalogFilterMenu({ groups, selected = [], onToggle, onClear }: CatalogFilterMenuProps) {
-  const fields = <CatalogFilterFields groups={groups} selected={selected} onToggle={onToggle} />;
-  const clearButton = (
+const FilterMenuContext = createContext<FilterMenuState | null>(null);
+
+function useFilterMenu() {
+  const menu = use(FilterMenuContext);
+  if (!menu) throw new Error("CatalogFilterMenu parts require a CatalogFilterMenu.Root.");
+  return menu;
+}
+
+function Root({ children, ...state }: FilterMenuState & { children: ReactNode }) {
+  return <FilterMenuContext value={state}>{children}</FilterMenuContext>;
+}
+
+function Fields() {
+  const { groups, selected, onToggle } = useFilterMenu();
+  return <CatalogFilterFields groups={groups} selected={selected} onToggle={onToggle} />;
+}
+
+function ClearButton() {
+  const { selected, onClear } = useFilterMenu();
+  return (
     <button
       type="button"
       onClick={onClear}
@@ -23,28 +41,39 @@ export function CatalogFilterMenu({ groups, selected = [], onToggle, onClear }: 
       Clear All
     </button>
   );
+}
 
+function Sidebar({ children }: { children: ReactNode }) {
   return (
-    <>
-      <aside
-        aria-label="Filters"
-        className="hidden rounded-lg border border-border bg-surface lg:block"
-      >
-        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-1">
-          <h2 className="flex items-center gap-2 font-body text-sm font-semibold">
-            <SlidersHorizontal aria-hidden="true" className="size-4" />
-            Filters
-          </h2>
-          {clearButton}
-        </div>
-        {fields}
-      </aside>
-
-      <div className="lg:hidden">
-        <CatalogFilterDrawer selectedCount={selected.length} clearButton={clearButton} onReset={onClear}>
-          {fields}
-        </CatalogFilterDrawer>
+    <aside
+      aria-label="Filters"
+      className="hidden border border-border bg-surface lg:block"
+    >
+      <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-1">
+        <h2 className="flex items-center gap-2 font-body text-sm font-semibold">
+          <SlidersHorizontal aria-hidden="true" className="size-4" />
+          Filters
+        </h2>
+        <ClearButton />
       </div>
-    </>
+      {children}
+    </aside>
   );
 }
+
+function Drawer({ children }: { children: ReactNode }) {
+  const { selected, onClear } = useFilterMenu();
+  return (
+    <div className="lg:hidden">
+      <CatalogFilterDrawer
+        selectedCount={selected.length}
+        clearButton={<ClearButton />}
+        onReset={onClear}
+      >
+        {children}
+      </CatalogFilterDrawer>
+    </div>
+  );
+}
+
+export const CatalogFilterMenu = { Root, Sidebar, Drawer, Fields };
