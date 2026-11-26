@@ -16,15 +16,9 @@ const filterParam = parseAsNativeArrayOf(parseAsString).withOptions({
   scroll: false,
 });
 
-function noop() {}
-
 export function CatalogFilters({ groups }: CatalogFiltersProps) {
-  const fallback = (
-    <CatalogFilterMenu groups={groups} selected={[]} onToggle={noop} onClear={noop} />
-  );
-
   return (
-    <Suspense fallback={fallback}>
+    <Suspense fallback={<CatalogFilterMenu groups={groups} />}>
       <UrlFilterMenu groups={groups} />
     </Suspense>
   );

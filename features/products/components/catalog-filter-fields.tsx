@@ -4,7 +4,7 @@ import type { CatalogFilterGroup } from "../catalog-filters";
 interface CatalogFilterFieldsProps {
   groups: readonly CatalogFilterGroup[];
   selected: readonly string[];
-  onToggle: (id: string) => void;
+  onToggle?: (id: string) => void;
 }
 
 export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilterFieldsProps) {
@@ -27,7 +27,8 @@ export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilte
                   aria-label={label}
                   aria-pressed={checked}
                   title={label}
-                  onClick={() => onToggle(id)}
+                  disabled={!onToggle}
+                  onClick={() => onToggle?.(id)}
                   className="grid size-10 cursor-pointer place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-ring"
                 >
                   <span
@@ -43,7 +44,8 @@ export function CatalogFilterFields({ groups, selected, onToggle }: CatalogFilte
                   <input
                     type="checkbox"
                     checked={checked}
-                    onChange={() => onToggle(id)}
+                    disabled={!onToggle}
+                    onChange={() => onToggle?.(id)}
                     className="size-4 shrink-0 accent-burgundy"
                   />
                   <span>{label}</span>

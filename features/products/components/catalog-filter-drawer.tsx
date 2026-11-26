@@ -14,7 +14,7 @@ import {
 interface CatalogFilterDrawerProps {
   selectedCount: number;
   clearButton: ReactNode;
-  onReset: () => void;
+  onReset?: () => void;
   children: ReactNode;
 }
 
@@ -70,6 +70,7 @@ export function CatalogFilterDrawer({
             type="button"
             variant="outline"
             className="min-h-11"
+            disabled={!onReset}
             onClick={onReset}
           >
             Reset

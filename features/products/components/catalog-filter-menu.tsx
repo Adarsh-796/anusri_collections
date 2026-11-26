@@ -6,18 +6,18 @@ import { CatalogFilterFields } from "./catalog-filter-fields";
 
 interface CatalogFilterMenuProps {
   groups: readonly CatalogFilterGroup[];
-  selected: readonly string[];
-  onToggle: (id: string) => void;
-  onClear: () => void;
+  selected?: readonly string[];
+  onToggle?: (id: string) => void;
+  onClear?: () => void;
 }
 
-export function CatalogFilterMenu({ groups, selected, onToggle, onClear }: CatalogFilterMenuProps) {
+export function CatalogFilterMenu({ groups, selected = [], onToggle, onClear }: CatalogFilterMenuProps) {
   const fields = <CatalogFilterFields groups={groups} selected={selected} onToggle={onToggle} />;
   const clearButton = (
     <button
       type="button"
       onClick={onClear}
-      disabled={selected.length === 0}
+      disabled={!onClear || selected.length === 0}
       className="min-h-10 cursor-pointer rounded-sm text-xs font-semibold whitespace-nowrap text-link underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ring disabled:cursor-default disabled:text-text-secondary"
     >
       Clear All
