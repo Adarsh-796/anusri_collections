@@ -1,3 +1,5 @@
+"use client";
+
 import { useFilterMenu } from "@/contexts/filter-context/filter-menu-context";
 
 export function ClearButton() {

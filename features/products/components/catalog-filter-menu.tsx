@@ -1,13 +1,15 @@
-"use client";
-
 import type { ReactNode } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
 import { ClearButton } from "./catalog-filter-clear-button";
-export { CatalogFilterFields as Fields } from "./catalog-filter-fields";
-export { CatalogFilterDrawer as Drawer } from "./catalog-filter-drawer";
+import { CatalogFilterFields } from "./catalog-filter-fields";
+import { CatalogFilterDrawer } from "./catalog-filter-drawer";
 
-export function Sidebar({ children }: { children: ReactNode }) {
+function CatalogFilterMenuSidebar({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <aside
       aria-label="Filters"
@@ -24,3 +26,9 @@ export function Sidebar({ children }: { children: ReactNode }) {
     </aside>
   );
 }
+
+export const CatalogFilterMenu = {
+  Sidebar: CatalogFilterMenuSidebar,
+  Fields: CatalogFilterFields,
+  Drawer: CatalogFilterDrawer,
+};

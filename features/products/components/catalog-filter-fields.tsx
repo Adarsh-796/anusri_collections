@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, ChevronDown } from "lucide-react";
 import type { CatalogFilterGroup } from "../catalog-filters";
 

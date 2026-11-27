@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { CatalogResultsSkeleton } from "@/components/skeleton/catalog-results-skeleton";
 import { CollectionFilterFields } from "@/features/products/components/collection-filter-fields";
 import { CatalogFilters } from "@/features/products/components/catalog-filter-controls";
-import * as CatalogFilterMenu from "@/features/products/components/catalog-filter-menu";
+import { CatalogFilterMenu } from "@/features/products/components/catalog-filter-menu";
 import { CatalogResults } from "@/features/products/components/catalog-results";
 import { RelatedCollections } from "@/features/products/components/discover-more-collections";
 import { ProductCatalog } from "@/features/products/components/product-catalog";
@@ -24,7 +24,10 @@ export default function SareesPage({ searchParams }: PageProps<"/sarees">) {
           </CatalogFilterMenu.Drawer>
         </CatalogFilters>
         <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>
-          <CatalogResults.Root collection={collection} searchParams={searchParams}>
+          <CatalogResults.Root
+            collection={collection}
+            searchParams={searchParams}
+          >
             <CatalogResults.Toolbar />
             <CatalogResults.Grid />
             <CatalogResults.Pagination />
