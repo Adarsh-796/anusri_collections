@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/drawer";
 
 import { ClearButton } from "./catalog-filter-clear-button";
-import { useFilterMenu } from "./catalog-filter-controls";
+import { useFilterMenu } from "@/contexts/filter-context/filter-menu-context";
 
 export function CatalogFilterDrawer({ children }: { children: ReactNode }) {
   const { selected, onClear } = useFilterMenu();

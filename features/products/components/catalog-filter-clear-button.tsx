@@ -1,4 +1,4 @@
-import { useFilterMenu } from "./catalog-filter-controls";
+import { useFilterMenu } from "@/contexts/filter-context/filter-menu-context";
 
 export function ClearButton() {
   const { selected, onClear } = useFilterMenu();

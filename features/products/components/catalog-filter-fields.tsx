@@ -1,7 +1,7 @@
 import { Check, ChevronDown } from "lucide-react";
 import type { CatalogFilterGroup } from "../catalog-filters";
 
-import { useFilterMenu } from "./catalog-filter-controls";
+import { useFilterMenu } from "@/contexts/filter-context/filter-menu-context";
 
 interface CatalogFilterFieldsProps {
   groups: readonly CatalogFilterGroup[];
