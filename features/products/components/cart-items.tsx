@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { ComponentProps } from "react";
-import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
+import { cartDrawerHandle } from "../cart-drawer-handle";
 import { Drawer, DrawerClose, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import Link from "next/link";
 import { Minus, Plus, X } from "lucide-react";
@@ -14,16 +14,14 @@ import { ProductCardPrice } from "./product-card";
 
 type CartProduct = Pick<CatalogProduct, "id" | "title" | "href" | "price" | "priceUnit" | "image" | "category" | "color">;
 
-const handle = BaseDrawer.createHandle();
-
 export function CartTrigger(props: ComponentProps<typeof DrawerTrigger>) {
-  return <DrawerTrigger {...props} handle={handle} />;
+  return <DrawerTrigger {...props} handle={cartDrawerHandle} />;
 }
 
 export function CartDrawer({ products }: { products: readonly CartProduct[] }) {
   return (
-    <Drawer swipeDirection="right" handle={handle}>
-      <DrawerContent className="w-full! max-w-lg bg-surface text-espresso data-[swipe-direction=right]:rounded-none">
+    <Drawer swipeDirection="right" handle={cartDrawerHandle}>
+      <DrawerContent className="w-11/12! max-w-lg bg-surface text-espresso data-[swipe-direction=right]:rounded-none">
         <header className="mx-5 flex shrink-0 items-center justify-between border-b border-gold py-5">
           <DrawerTitle className="text-3xl">Cart</DrawerTitle>
           <DrawerClose aria-label="Close cart" className="grid size-11 cursor-pointer place-items-center"><X /></DrawerClose>

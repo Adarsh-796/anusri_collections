@@ -86,7 +86,6 @@ export function BoutiqueProductCard({
         <AddToCartButton
           productId={id}
           title={title}
-          unit={priceUnit}
           className="w-full text-xs sm:text-sm"
         />
       </ProductCardContent>

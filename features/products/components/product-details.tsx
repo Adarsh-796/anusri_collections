@@ -31,7 +31,7 @@ export function ProductDetails({
         <p className="mb-2 text-text-secondary">{product.category}</p>
         <h1>{product.title}</h1>
         <ProductCardPrice unit={product.priceUnit} className="mt-4">{product.price}</ProductCardPrice>
-        <AddToCartButton productId={product.id} title={product.title} unit={product.priceUnit} className="mt-5 px-5" />
+        <AddToCartButton productId={product.id} title={product.title} className="mt-5 px-5" />
       </div>
     </main>
   );

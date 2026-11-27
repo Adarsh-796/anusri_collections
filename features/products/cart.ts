@@ -77,11 +77,7 @@ export function useCartCount() {
   return useSyncExternalStore(subscribe, getItemCount, getServerQuantity);
 }
 
-export function useCartQuantity(id: string) {
-  return useSyncExternalStore(subscribe, () => getSnapshot().get(id) ?? 0, getServerQuantity);
-}
-
-export function changeCartQuantity(id: string, change: 1 | -1 | "remove") {
+export function changeCartQuantity(id: string, change: 1 | -1 | "remove" | "addIfMissing") {
   const items = new Map(getSnapshot());
   const key = itemKeyPrefix + id;
   let current = items.get(id) ?? 0;
@@ -94,9 +90,12 @@ export function changeCartQuantity(id: string, change: 1 | -1 | "remove") {
     }
   }
 
-  const quantity = change === "remove"
+  if (change === "addIfMissing" && current > 0) return false;
+
+  const delta = change === "addIfMissing" ? 1 : change;
+  const quantity = delta === "remove"
     ? 0
-    : Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, current + change));
+    : Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, current + delta));
   try {
     if (quantity === 0) window.localStorage.removeItem(key);
     else window.localStorage.setItem(key, String(quantity));
@@ -108,4 +107,5 @@ export function changeCartQuantity(id: string, change: 1 | -1 | "remove") {
   updateQuantity(items, id, quantity);
   snapshot = items;
   listeners.forEach((listener) => listener());
+  return true;
 }
