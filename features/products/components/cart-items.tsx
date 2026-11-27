@@ -1,19 +1,43 @@
 "use client";
 
+import Image from "next/image";
+import type { ComponentProps } from "react";
+import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import Link from "next/link";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { changeCartQuantity, useCart } from "../cart";
 import type { CatalogProduct } from "../catalog-filters";
 import { ProductCardPrice } from "./product-card";
 
-type CartProduct = Pick<CatalogProduct, "id" | "title" | "href" | "price" | "priceUnit">;
+type CartProduct = Pick<CatalogProduct, "id" | "title" | "href" | "price" | "priceUnit" | "image" | "category" | "color">;
 
-export function CartItems({ products }: { products: readonly CartProduct[] }) {
+const handle = BaseDrawer.createHandle();
+
+export function CartTrigger(props: ComponentProps<typeof DrawerTrigger>) {
+  return <DrawerTrigger {...props} handle={handle} />;
+}
+
+export function CartDrawer({ products }: { products: readonly CartProduct[] }) {
+  return (
+    <Drawer swipeDirection="right" handle={handle}>
+      <DrawerContent className="w-full! max-w-lg bg-surface text-espresso data-[swipe-direction=right]:rounded-none">
+        <header className="mx-5 flex shrink-0 items-center justify-between border-b border-gold py-5">
+          <DrawerTitle className="text-3xl">Cart</DrawerTitle>
+          <DrawerClose aria-label="Close cart" className="grid size-11 cursor-pointer place-items-center"><X /></DrawerClose>
+        </header>
+        <CartItems products={products} />
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+function CartItems({ products }: { products: readonly CartProduct[] }) {
   const cart = useCart();
   if (!cart) {
-    return <p role="status" className="mt-4 text-text-secondary">Loading cart…</p>;
+    return <p role="status" className="p-5 text-text-secondary">Loading cart…</p>;
   }
 
   const lines = products.flatMap((product) => {
@@ -22,11 +46,11 @@ export function CartItems({ products }: { products: readonly CartProduct[] }) {
   });
   if (lines.length === 0) {
     return (
-      <div className="mt-5 space-y-3">
+      <div className="p-5 space-y-3">
         <p className="text-text-secondary">Your cart is empty.</p>
-        <Link href="/sarees" className="font-semibold text-link underline underline-offset-4">
+        <DrawerClose nativeButton={false} render={<Link href="/sarees" />} className="font-semibold text-link underline underline-offset-4">
           Browse Sarees
-        </Link>
+        </DrawerClose>
       </div>
     );
   }
@@ -34,15 +58,17 @@ export function CartItems({ products }: { products: readonly CartProduct[] }) {
   const subtotal = lines.reduce((total, { product, quantity }) => total + product.price * quantity, 0);
 
   return (
-    <div className="mt-6 rounded-lg border border-border bg-surface">
-      <ul aria-label="Cart items" className="divide-y divide-border">
-        {lines.map(({ product: { id, title, href, price, priceUnit }, quantity }) => (
-          <li key={id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+    <>
+      <ul aria-label="Cart items" className="min-h-0 flex-1 divide-y divide-border overflow-y-auto px-5">
+        {lines.map(({ product: { id, title, href, image, category, color, price, priceUnit }, quantity }) => (
+          <li key={id} className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 py-6">
+            <Image src={image} alt="" width={96} height={128} className="row-span-2 aspect-3/4 w-16 rounded-sm object-cover sm:w-24" />
             <div className="min-w-0">
-              <Link href={href} className="font-semibold text-link hover:underline">{title}</Link>
+              <DrawerClose nativeButton={false} render={<Link href={href} />} className="font-heading text-lg text-link hover:underline">{title}</DrawerClose>
+              <p className="my-1 text-text-secondary">{category} · {color}</p>
               <ProductCardPrice unit={priceUnit} className="mt-1 text-base">{price}</ProductCardPrice>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="col-start-2 flex flex-wrap items-center gap-2">
               <div role="group" aria-label={`Quantity for ${title}`} className="flex items-center gap-1">
                 <Button type="button" variant="outline" size="icon" className="size-11" aria-label={`Decrease quantity of ${title}`} disabled={quantity === 1} onClick={() => changeCartQuantity(id, -1)}>
                   <Minus aria-hidden="true" />
@@ -65,6 +91,7 @@ export function CartItems({ products }: { products: readonly CartProduct[] }) {
         <span>Subtotal</span>
         <ProductCardPrice className="text-xl">{subtotal}</ProductCardPrice>
       </div>
-    </div>
+      <a href="tel:+918019167233" className="mx-5 mb-5 bg-burgundy p-3 text-center font-semibold text-ivory">Call to order</a>
+    </>
   );
 }

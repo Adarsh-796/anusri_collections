@@ -1,3 +1,5 @@
+import { boutiqueProducts, dressProducts, fabricProducts } from "@/features/products/products";
+import { CartDrawer } from "@/features/products/components/cart-items";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/footer";
@@ -5,6 +7,19 @@ import { Navbar } from "@/components/navbar/navbar";
 import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Container from "@/components/container";
+
+const cartProducts = [...boutiqueProducts, ...dressProducts, ...fabricProducts].map(
+  (product) => ({
+    id: product.id,
+    title: product.title,
+    href: product.href,
+    image: product.image,
+    category: product.category,
+    color: product.color,
+    price: product.price,
+    priceUnit: "priceUnit" in product ? product.priceUnit : undefined,
+  }),
+);
 
 const playfair = Playfair_Display({
   variable: "--font-playfair-display",
@@ -32,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar />
           <NuqsAdapter>{children}</NuqsAdapter>
           <Footer />
+          <CartDrawer products={cartProducts} />
         </Container>
       </body>
     </html>

@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { CartTrigger } from "@/features/products/components/cart-items";
 import { ShoppingBag } from "lucide-react";
 import { useCartCount } from "@/features/products/cart";
-import { NavbarLinkGroup } from "./navbar-link-group";
 
 const actionClassName =
-  "relative inline-flex size-11 items-center justify-center rounded-sm text-foreground hover:text-link aria-[current=page]:text-link focus-visible:outline-2 focus-visible:outline-ring motion-safe:transition-colors";
+  "relative inline-flex size-11 cursor-pointer items-center justify-center rounded-sm text-foreground hover:text-link aria-[current=page]:text-link focus-visible:outline-2 focus-visible:outline-ring motion-safe:transition-colors";
 
 function CountBadge({ count }: { count: number }) {
   if (count <= 0) return null;
@@ -23,23 +21,14 @@ function CountBadge({ count }: { count: number }) {
 }
 
 export function NavbarActions() {
-  const pathname = usePathname();
   const cartCount = useCartCount();
   return (
-    <NavbarLinkGroup
-      pathname={pathname}
-      aria-label="Shopping navigation"
-      className="flex items-center justify-end lg:gap-3"
-    >
-      <Link
-        href="/cart"
+    <CartTrigger
         aria-label={cartCount > 0 ? `Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Cart"}
-        aria-current={pathname === "/cart" ? "page" : undefined}
         className={actionClassName}
       >
         <ShoppingBag aria-hidden="true" className="size-6" />
         <CountBadge count={cartCount} />
-      </Link>
-    </NavbarLinkGroup>
+    </CartTrigger>
   );
 }

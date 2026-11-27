@@ -1,11 +1,11 @@
 import { Clock, Mail, MapPin, MessageSquare, Phone } from "lucide-react";
 import Link from "next/link";
+import { CartTrigger } from "@/features/products/components/cart-items";
 
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Cart", href: "/cart" },
 ];
 
 const shopLinks = [
@@ -28,11 +28,12 @@ const headingClassName =
   "mb-2 text-sm font-semibold tracking-wider text-[#d0a568] uppercase";
 
 interface FooterLinksProps {
+  children?: React.ReactNode;
   title: string;
   links: { label: string; href: string }[];
 }
 
-function FooterLinks({ title, links }: FooterLinksProps) {
+function FooterLinks({ title, links, children }: FooterLinksProps) {
   return (
     <nav aria-label={title}>
       <h2 className={headingClassName}>{title}</h2>
@@ -44,6 +45,7 @@ function FooterLinks({ title, links }: FooterLinksProps) {
             </Link>
           </li>
         ))}
+        {children}
       </ul>
     </nav>
   );
@@ -101,7 +103,9 @@ export function Footer() {
             </div>
           </div>
 
-          <FooterLinks title="Quick Links" links={quickLinks} />
+          <FooterLinks title="Quick Links" links={quickLinks}>
+            <li><CartTrigger className={`cursor-pointer ${linkClassName}`}>Cart</CartTrigger></li>
+          </FooterLinks>
           <FooterLinks title="Shop & Couture" links={shopLinks} />
 
           <section>
