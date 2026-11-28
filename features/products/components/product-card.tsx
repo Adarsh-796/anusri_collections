@@ -62,7 +62,7 @@ export function ProductCardAction({
     <Link
       {...props}
       className={cn(
-        "absolute inset-x-2.5 bottom-2.5 flex min-h-button items-center justify-center bg-surface px-4 py-2 text-center text-sm tracking-wide text-card-foreground uppercase",
+        "absolute inset-x-2.5 bottom-2.5 flex min-h-button items-center justify-center bg-surface px-4 py-2 text-center text-sm tracking-wide text-card-foreground uppercase font-medium",
         "hover:bg-burgundy hover:text-white focus-visible:bg-burgundy focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         "motion-safe:transition-[opacity,translate,background-color,color] motion-safe:duration-200",
         "[@media(hover:hover)_and_(pointer:fine)]:group-not-[&:hover]/product:not-focus-visible:pointer-events-none",

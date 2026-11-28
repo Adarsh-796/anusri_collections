@@ -73,7 +73,7 @@ export function BoutiqueProductCard({
         <AddToCartButton
           productId={id}
           title={title}
-          className="w-full text-xs sm:text-sm"
+          className="w-full text-md"
         />
       </ProductCardContent>
     </ProductCard>

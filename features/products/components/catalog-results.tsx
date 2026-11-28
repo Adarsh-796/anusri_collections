@@ -11,17 +11,25 @@ interface ResultsProps {
   searchParams: Promise<SearchParams>;
 }
 
-const readCatalogPage = cache(async (
-  collection: ProductCollection,
-  searchParams: Promise<SearchParams>,
-) => {
-  const params = await loadCatalogQuery(searchParams);
-  return getCatalogPage(productsByCollection[collection], params);
-});
+const readCatalogPage = cache(
+  async (
+    collection: ProductCollection,
+    searchParams: Promise<SearchParams>,
+  ) => {
+    const params = await loadCatalogQuery(searchParams);
+    return getCatalogPage(productsByCollection[collection], params);
+  },
+);
 
-function Root({ children, collection }: Pick<ResultsProps, "collection"> & { children: ReactNode }) {
+function Root({
+  children,
+  collection,
+}: Pick<ResultsProps, "collection"> & { children: ReactNode }) {
   return (
-    <section aria-label={`${collection} results`} className="@container/results min-w-0 scroll-mt-24">
+    <section
+      aria-label={`${collection} results`}
+      className="@container/results min-w-0 scroll-mt-24"
+    >
       <h2 className="sr-only">Products</h2>
       {children}
     </section>
@@ -38,7 +46,7 @@ async function Grid({ collection, searchParams }: ResultsProps) {
   if (!products.length) return null;
 
   return (
-    <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
+    <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-1 @md/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
       {products.map((product) => (
         <li key={product.id} className="min-w-0">
           <BoutiqueProductCard
