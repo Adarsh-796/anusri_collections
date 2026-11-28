@@ -1,46 +1,60 @@
-import type { ReactNode } from "react";
+import { cache, type ReactNode } from "react";
 import type { SearchParams } from "nuqs/server";
 
 import { getCatalogPage, loadCatalogQuery } from "../catalog-query";
 import { productsByCollection, type ProductCollection } from "../products";
 import { BoutiqueProductCard } from "./boutique-product-card";
-import { ResultsProvider, CatalogPagination, Grid, Toolbar } from "./catalog-browser";
+import { PaginationControls, ToolbarControls } from "./catalog-browser";
 
-const collectionTitles = {
-  sarees: "Sarees",
-  dresses: "Dresses",
-  fabrics: "Fabrics",
-} satisfies Record<ProductCollection, string>;
-
-interface CatalogResultsProps {
-  children: ReactNode;
+interface ResultsProps {
   collection: ProductCollection;
   searchParams: Promise<SearchParams>;
 }
 
-async function Root({
-  children,
-  collection,
-  searchParams,
-}: CatalogResultsProps) {
+const readCatalogPage = cache(async (
+  collection: ProductCollection,
+  searchParams: Promise<SearchParams>,
+) => {
   const params = await loadCatalogQuery(searchParams);
-  const { products, query, total } = getCatalogPage(productsByCollection[collection], params);
+  return getCatalogPage(productsByCollection[collection], params);
+});
 
-  const cards = products.map((product) => (
-    <li key={product.id} className="min-w-0">
-      <BoutiqueProductCard
-        product={product}
-        variant={collection === "fabrics" ? "fabric" : "standard"}
-        prefetch={false}
-      />
-    </li>
-  ));
-
+function Root({ children, collection }: Pick<ResultsProps, "collection"> & { children: ReactNode }) {
   return (
-    <ResultsProvider value={{ title: collectionTitles[collection], total, page: query.page, cards }}>
+    <section aria-label={`${collection} results`} className="@container/results min-w-0 scroll-mt-24">
+      <h2 className="sr-only">Products</h2>
       {children}
-    </ResultsProvider>
+    </section>
   );
 }
 
-export const CatalogResults = { Root, Toolbar, Grid, Pagination: CatalogPagination };
+async function Toolbar({ collection, searchParams }: ResultsProps) {
+  const { total, query } = await readCatalogPage(collection, searchParams);
+  return <ToolbarControls title={collection} total={total} page={query.page} />;
+}
+
+async function Grid({ collection, searchParams }: ResultsProps) {
+  const { products } = await readCatalogPage(collection, searchParams);
+  if (!products.length) return null;
+
+  return (
+    <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
+      {products.map((product) => (
+        <li key={product.id} className="min-w-0">
+          <BoutiqueProductCard
+            product={product}
+            variant={collection === "fabrics" ? "fabric" : "standard"}
+            prefetch={false}
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+async function Pagination({ collection, searchParams }: ResultsProps) {
+  const { total, query } = await readCatalogPage(collection, searchParams);
+  return <PaginationControls total={total} page={query.page} />;
+}
+
+export const CatalogResults = { Root, Toolbar, Grid, Pagination };

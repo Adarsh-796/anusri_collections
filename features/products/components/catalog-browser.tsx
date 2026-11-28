@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useRef, type ReactNode, type RefObject } from "react";
+import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,64 +9,27 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import {
-  catalogPageSize,
-  catalogParsers,
-} from "../catalog-query";
+import { catalogPageSize, catalogParsers } from "../catalog-query";
 import { useCatalogControls } from "./use-catalog-controls";
 
-interface ResultsData {
-  title: string;
+interface PageInfo {
   page: number;
   total: number;
-  cards: ReactNode;
 }
 
-interface ResultsState extends ResultsData {
-  navigation: ReturnType<typeof useCatalogControls>;
-  resultsRef: RefObject<HTMLElement | null>;
-}
-
-const ResultsContext = createContext<ResultsState | null>(null);
-
-function useResults() {
-  const results = use(ResultsContext);
-  if (!results) throw new Error("Catalog results components require CatalogResults.Root.");
-  return results;
-}
-
-export function ResultsProvider({ value, children }: { value: ResultsData; children: ReactNode }) {
-  const navigation = useCatalogControls();
-  const resultsRef = useRef<HTMLElement>(null);
-  return (
-    <ResultsContext value={{ ...value, navigation, resultsRef }}>
-      <section
-        ref={resultsRef}
-        aria-label={`${value.title} results`}
-        aria-busy={navigation.pending}
-        className="@container/results min-w-0 scroll-mt-24"
-      >
-        <h2 className="sr-only">Products</h2>
-        {children}
-      </section>
-    </ResultsContext>
-  );
-}
-
-export function Toolbar() {
-  const { title, total, page, navigation: { controls, setControls } } = useResults();
+export function ToolbarControls({ title, total, page }: PageInfo & { title: string }) {
+  const { controls, setControls, pending } = useCatalogControls();
   const offset = (page - 1) * catalogPageSize;
   return (
-    <div
-      className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-lg border border-border bg-surface px-3 py-2 sm:px-4"
-    >
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border border-border bg-surface px-3 py-2 sm:px-4">
       <p
         role="status"
+        aria-busy={pending}
         className="order-last w-full text-sm leading-snug font-semibold tabular-nums sm:order-0 sm:w-auto"
       >
         {total
-          ? `Showing ${offset + 1}–${Math.min(offset + catalogPageSize, total)} of ${total} ${title.toLowerCase()}`
-          : `No ${title.toLowerCase()} available`}
+          ? `Showing ${offset + 1}–${Math.min(offset + catalogPageSize, total)} of ${total} ${title}`
+          : `No ${title} available`}
       </p>
       <label className="ms-auto flex min-w-0 items-center gap-1 text-sm text-text-secondary">
         <span className="whitespace-nowrap">Sort by</span>
@@ -88,28 +51,19 @@ export function Toolbar() {
   );
 }
 
-export function Grid() {
-  const { total, cards } = useResults();
-  if (!total) return null;
-  return (
-    <ul className="grid grid-cols-1 items-stretch gap-3 @xs/results:grid-cols-2 @2xl/results:grid-cols-3 @4xl/results:grid-cols-4 sm:gap-4">
-      {cards}
-    </ul>
-  );
-}
-
-export function CatalogPagination() {
-  const { total, page, navigation: { setControls }, resultsRef } = useResults();
+export function PaginationControls({ total, page }: PageInfo) {
+  const { setControls, pending } = useCatalogControls();
+  const navRef = useRef<HTMLElement>(null);
   const pageCount = Math.ceil(total / catalogPageSize);
   if (pageCount <= 1) return null;
 
   function goToPage(nextPage: number) {
     void setControls({ page: nextPage });
-    resultsRef.current?.scrollIntoView({ block: "start" });
+    navRef.current?.closest("section")?.scrollIntoView({ block: "start" });
   }
 
   return (
-    <Pagination aria-label="Catalog pages" className="mt-6">
+    <Pagination ref={navRef} aria-busy={pending} aria-label="Catalog pages" className="mt-6">
       <PaginationContent className="flex-wrap justify-center gap-1">
         <PaginationItem>
           <Button

@@ -24,10 +24,10 @@ export default function DressesPage({ searchParams }: PageProps<"/dresses">) {
           </CatalogFilterMenu.Drawer>
         </CatalogFilters>
         <Suspense fallback={<CatalogResultsSkeleton collection={collection} />}>
-          <CatalogResults.Root collection={collection} searchParams={searchParams}>
-            <CatalogResults.Toolbar />
-            <CatalogResults.Grid />
-            <CatalogResults.Pagination />
+          <CatalogResults.Root collection={collection}>
+            <CatalogResults.Toolbar collection={collection} searchParams={searchParams} />
+            <CatalogResults.Grid collection={collection} searchParams={searchParams} />
+            <CatalogResults.Pagination collection={collection} searchParams={searchParams} />
           </CatalogResults.Root>
         </Suspense>
       </ProductCatalog.Content>
