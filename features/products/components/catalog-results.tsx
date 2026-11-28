@@ -65,4 +65,4 @@ async function Pagination({ collection, searchParams }: ResultsProps) {
   return <PaginationControls total={total} page={query.page} />;
 }
 
-export const CatalogResults = { Root, Toolbar, Grid, Pagination };
+export { Root, Toolbar, Grid, Pagination };

@@ -2,11 +2,6 @@ import type { ComponentProps } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export function getNavbarLinkCurrent(pathname: string, href: string) {
-  if (pathname === href) return "page";
-  if (href !== "/" && pathname.startsWith(`${href}/`)) return "location";
-}
-
 export function NavbarLink({
   className,
   children,

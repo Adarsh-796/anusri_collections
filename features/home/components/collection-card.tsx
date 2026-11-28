@@ -128,13 +128,13 @@ export function CollectionEyebrow({ children }: CollectionEyebrowProps) {
   );
 }
 
-export const CollectionCard = {
-  Root: CollectionCardRoot,
-  Image: CollectionCardImage,
-  Overlay: CollectionCardOverlay,
-  Content: CollectionCardContent,
-  Eyebrow: CollectionEyebrow,
-  Title: CollectionTitle,
-  Description: CollectionDescription,
-  Link: CollectionCardLink,
+export {
+  CollectionCardRoot as Root,
+  CollectionCardImage as Image,
+  CollectionCardOverlay as Overlay,
+  CollectionCardContent as Content,
+  CollectionEyebrow as Eyebrow,
+  CollectionTitle as Title,
+  CollectionDescription as Description,
+  CollectionCardLink as Link,
 };

@@ -27,8 +27,8 @@ function CatalogFilterMenuSidebar({
   );
 }
 
-export const CatalogFilterMenu = {
-  Sidebar: CatalogFilterMenuSidebar,
-  Fields: CatalogFilterFields,
-  Drawer: CatalogFilterDrawer,
+export {
+  CatalogFilterMenuSidebar as Sidebar,
+  CatalogFilterFields as Fields,
+  CatalogFilterDrawer as Drawer,
 };

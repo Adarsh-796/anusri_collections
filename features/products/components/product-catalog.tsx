@@ -22,8 +22,8 @@ function ProductCatalogContent({ children }: { children: ReactNode }) {
   );
 }
 
-export const ProductCatalog = {
-  Root: ProductCatalogRoot,
-  Title: ProductCatalogTitle,
-  Content: ProductCatalogContent,
+export {
+  ProductCatalogRoot as Root,
+  ProductCatalogTitle as Title,
+  ProductCatalogContent as Content,
 };

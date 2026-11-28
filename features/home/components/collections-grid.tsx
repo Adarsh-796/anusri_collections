@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { CollectionCard } from "./collection-card";
+import * as CollectionCard from "./collection-card";
 const collections = [
   {
     title: "Sarees",

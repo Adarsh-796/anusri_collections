@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import Link from "next/link";
 import { cn } from "cn";
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export function PrimaryLink({
   className,

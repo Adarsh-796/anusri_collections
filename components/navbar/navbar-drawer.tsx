@@ -13,7 +13,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { getNavbarLinkCurrent } from "./navbar-link";
+import { getNavbarLinkCurrent } from "./get-navbar-link-current";
 
 const iconButton =
   "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center text-foreground hover:text-link focus-visible:outline-2 focus-visible:outline-ring";

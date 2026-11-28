@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { navbarItems } from "@/lib/consts";
-import { getNavbarLinkCurrent, NavbarLink } from "./navbar-link";
+import { getNavbarLinkCurrent } from "./get-navbar-link-current";
+import { NavbarLink } from "./navbar-link";
 import { NavbarLinkGroup } from "./navbar-link-group";
 
 export function NavbarNavigation() {

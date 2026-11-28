@@ -11,6 +11,7 @@ interface CatalogFilterFieldsProps {
 
 export function CatalogFilterFields({ groups }: CatalogFilterFieldsProps) {
   const { selected, onToggle } = useFilterMenu();
+  const selectedIds = new Set(selected);
   return (
     <div className="divide-y divide-border/70 px-4">
       {groups.map(({ title, options }, index) => (
@@ -21,7 +22,7 @@ export function CatalogFilterFields({ groups }: CatalogFilterFieldsProps) {
           </summary>
           <div role="group" aria-label={title} className="flex flex-wrap pb-2">
             {options.map(({ id, label, swatch }) => {
-              const checked = selected.includes(id);
+              const checked = selectedIds.has(id);
 
               return swatch ? (
                 <button
