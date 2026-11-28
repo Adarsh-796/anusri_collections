@@ -38,7 +38,7 @@ function CollectionSectionHeader() {
   return (
     <h2
       id="home-collections-title"
-      className="font-heading text-h2 leading-tight font-semibol"
+      className="font-heading text-h2 leading-tight font-semibold"
     >
       Explore Our Collections
     </h2>
@@ -47,7 +47,7 @@ function CollectionSectionHeader() {
 
 function CollectionSectionHeaderDescription() {
   return (
-    <p className="mx-auto mt-2 max-w-lg text-sm sm:text-base leading-relaxed text-[#6d5b55]">
+    <p className="mx-auto mt-2 max-w-lg text-sm sm:text-base leading-relaxed text-[#312c2b]">
       Discover pieces that bring together tradition, elegance, and timeless
       beauty.
     </p>

@@ -14,7 +14,7 @@ function CollectionCardRoot({ children, className }: CollectionCardProps) {
     <article
       data-slot="collection-card"
       className={cn(
-        "group/collection @container relative isolate flex aspect-square min-w-0 flex-col justify-end overflow-hidden bg-espresso text-ivory sm:aspect-4/5 lg:aspect-3/4",
+        "group/collection @container relative isolate flex min-w-0 flex-col justify-end overflow-hidden bg-espresso text-ivory sm:aspect-4/5 aspect-3/4",
         className,
       )}
     >
@@ -82,7 +82,7 @@ function CollectionCardLink({ href, children }: CollectionCardLinkProps) {
   return (
     <Link
       href={href}
-      className="group/cta mt-1 inline-flex items-center gap-2 rounded-sm font-body text-xs @md:text-sm leading-normal tracking-wide text-[#e6b578] uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
+      className="group/cta mt-1 inline-flex font-medium items-center gap-2 rounded-sm font-body text-sm @md:text-md leading-normal tracking-wide text-[#ffffff] uppercase transition-colors group-hover/collection:text-ivory hover:text-ivory focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold in-data-[slot=collection-card]:after:absolute in-data-[slot=collection-card]:after:inset-0 in-data-[slot=collection-card]:after:z-10"
     >
       {children}
       <ArrowRight

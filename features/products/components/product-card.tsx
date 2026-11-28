@@ -54,40 +54,6 @@ export function ProductCardImage({
   );
 }
 
-const badgeColors = {
-  new: "bg-burgundy",
-  heirloom: "bg-gold",
-  bridal: "bg-burgundy",
-  festive: "bg-ivory text-espresso",
-  trending: "bg-burgundy",
-};
-
-type ProductCardBadgeProps = ComponentProps<"span"> & {
-  variant?: keyof typeof badgeColors;
-};
-
-export function ProductCardBadge({
-  children,
-  className,
-  variant = "new",
-  ...props
-}: ProductCardBadgeProps) {
-  if (children == null || children === false || children === "") return null;
-
-  return (
-    <span
-      {...props}
-      className={cn(
-        "absolute inset-s-4 top-4 rounded-button px-3 py-1.5 text-sm leading-tight font-semibold tracking-wide text-white uppercase shadow-product",
-        badgeColors[variant],
-        className,
-      )}
-    >
-      {children}
-    </span>
-  );
-}
-
 export function ProductCardAction({
   className,
   ...props

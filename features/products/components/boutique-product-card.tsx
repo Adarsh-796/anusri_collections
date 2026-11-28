@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import {
   ProductCard,
   ProductCardAction,
-  ProductCardBadge,
   ProductCardCategory,
   ProductCardContent,
   ProductCardFooter,
@@ -20,10 +19,6 @@ export interface BoutiqueProduct {
   id: string;
   image: ComponentProps<typeof ProductCardImage>["src"];
   title: string;
-  badge?: {
-    variant: NonNullable<ComponentProps<typeof ProductCardBadge>["variant"]>;
-    label: string;
-  } | null;
   href: ComponentProps<typeof ProductCardAction>["href"];
   category: string;
   price: number | string;
@@ -43,7 +38,7 @@ export function BoutiqueProductCard({
   variant = "standard",
   prefetch,
 }: BoutiqueProductCardProps) {
-  const { id, image, title, badge, href, category, price, priceUnit } = product;
+  const { id, image, title, href, category, price, priceUnit } = product;
   const isFabric = variant === "fabric";
 
   return (
@@ -55,14 +50,6 @@ export function BoutiqueProductCard({
     >
       <ProductCardMedia className={isFabric ? "aspect-square" : undefined}>
         <ProductCardImage src={image} alt={title} loading="lazy" sizes="auto" />
-        {badge && (
-          <ProductCardBadge
-            variant={badge.variant}
-            className="inset-s-[clamp(0.5rem,4.5cqw,1rem)] top-[clamp(0.5rem,4.5cqw,1rem)] max-w-[calc(100%-1rem)] px-[clamp(0.5rem,3.5cqw,0.75rem)] py-[clamp(0.25rem,1.75cqw,0.375rem)] text-[clamp(0.625rem,3.8cqw,0.875rem)]"
-          >
-            {badge.label}
-          </ProductCardBadge>
-        )}
         <ProductCardAction
           href={href}
           prefetch={prefetch}

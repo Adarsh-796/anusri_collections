@@ -34,7 +34,7 @@ function Header({
   className?: string;
 }) {
   return (
-    <div className="mx-auto w-full max-w-md sm:max-w-none">
+    <div className="mx-auto w-full max-w-md sm:max-w-none mb-10">
       <header
         className={cn(
           "mb-stack flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6",
@@ -93,7 +93,10 @@ function Description({
 function ViewAll({ className, ...props }: ComponentProps<typeof ArrowLink>) {
   return (
     <ArrowLink
-      className={cn("min-h-11 shrink-0 gap-2 text-sm sm:min-h-6", className)}
+      className={cn(
+        "min-h-11 shrink-0 gap-2 text-sm sm:min-h-6 px-2 md:py-2 bg-gold text-white hover:text-white",
+        className,
+      )}
       {...props}
     />
   );
